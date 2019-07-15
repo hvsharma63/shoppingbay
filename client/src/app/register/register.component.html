@@ -1,0 +1,124 @@
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth px-0">
+            <div class="row w-100 mx-0">
+                <div class="col-lg-5 mx-auto">
+                    <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                        <div class="brand-logo">
+                            <img src="../../assets/images/logo.svg" alt="logo">
+                        </div>
+                        <h4>New here?</h4>
+                        <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
+                        <form class="pt-3" [formGroup]="registerationForm" (ngSubmit)="onSubmit()">
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" placeholder="First Name"
+                                        formControlName="firstName" minlength="3" required>
+                                    <span class="text-danger"
+                                        *ngFor="let validation of userValidationMessages.firstName">
+                                        <span class="error-message"
+                                            *ngIf="registerationForm.get('firstName').hasError(validation.type) && (registerationForm.get('firstName').dirty || registerationForm.get('firstName').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" placeholder="Last Name"
+                                        formControlName="lastName" minlength="3" required>
+                                    <span class="text-danger"
+                                        *ngFor="let validation of userValidationMessages.lastName">
+                                        <span class="text-danger"
+                                            *ngIf="registerationForm.get('lastName').hasError(validation.type) && (registerationForm.get('lastName').dirty || registerationForm.get('lastName').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <input type="date" class="form-control" formControlName="dob"
+                                        placeholder="Date of Birth" required>
+                                    <span class="text-danger" *ngFor="let validation of userValidationMessages.dob">
+                                        <span class="text-danger"
+                                            *ngIf="registerationForm.get('dob').hasError(validation.type) && (registerationForm.get('dob').dirty || registerationForm.get('dob').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" placeholder="Contact Number"
+                                        formControlName="contact" required minlength="10" maxlength="13">
+                                    <span class="text-danger" *ngFor="let validation of userValidationMessages.contact">
+                                        <span class="text-danger"
+                                            *ngIf="registerationForm.get('contact').hasError(validation.type) && (registerationForm.get('contact').dirty || registerationForm.get('contact').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control form-control-lg" id="exampleInputEmail1"
+                                    placeholder="Email" formControlName="email" email="true">
+                                <span class="text-danger" *ngFor="let validation of userValidationMessages.email">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('email').hasError(validation.type) && (registerationForm.get('email').dirty || registerationForm.get('email').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" (keyup)="getPassword(p.value)"
+                                    class="form-control form-control-lg" placeholder="Password" #p
+                                    formControlName="password">
+                                <span class="text-danger" *ngFor="let validation of userValidationMessages.password">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('password').hasError(validation.type) && (registerationForm.get('password').dirty || registerationForm.get('password').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-lg"
+                                    placeholder="Confirm Password" formControlName="confirmPassword">
+                                <span class="text-danger"
+                                    *ngFor="let validation of userValidationMessages.confirmPassword">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('confirmPassword').hasError(validation.type) && (registerationForm.get('confirmPassword').dirty || registerationForm.get('confirmPassword').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input" formControlName="terms"
+                                            required>
+                                        I agree to all Terms & Conditions
+                                    </label>
+                                    <span class="text-danger" *ngFor="let validation of userValidationMessages.terms">
+                                        <span class="text-danger"
+                                            *ngIf="registerationForm.get('terms').hasError(validation.type) && (registerationForm.get('terms').dirty || registerationForm.get('terms').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <button type="submit" [disabled]="!registerationForm.valid"
+                                    class="btn btn-primary btn-lg">SIGN
+                                    UP</button>
+                            </div>
+                            <div class="text-center mt-4 font-weight-light">
+                                Already have an account? <a [routerLink]="['/login']" routerLinkActive=""
+                                    class="text-primary">Login</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
