@@ -24,6 +24,7 @@ module.exports = {
         type: Sequelize.DATEONLY
       },
       profile: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       contact: {
@@ -34,6 +35,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       role: {
+        allowNull: false,
         type: Sequelize.ENUM('admin', 'user')
       },
       shippingAddress: {

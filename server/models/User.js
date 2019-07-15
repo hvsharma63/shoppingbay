@@ -46,12 +46,14 @@ module.exports = db.sequelize.define(
       type: Sequelize.DATE
     },
     profile: {
+      allowNull: true,
       type: Sequelize.STRING
     },
     contact: {
       type: Sequelize.STRING
     },
     resetToken: {
+      allowNull: true,
       type: Sequelize.STRING
     },
     role: {
