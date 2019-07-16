@@ -15,7 +15,7 @@ module.exports = db.sequelize.define(
     imagePath: {
       type: Sequelize.STRING
     },
-    desc: {
+    description: {
       type: Sequelize.TEXT
     },
     createdAt: {

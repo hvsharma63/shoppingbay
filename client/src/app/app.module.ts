@@ -11,10 +11,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { FooterComponent } from './layout/footer/footer.component';
-import { AuthenticationService } from './auth.service';
+import { AuthenticationService } from './services/auth.service';
 import { CategoriesComponent } from './categories/categories.component';
 import { DataTablesModule } from 'angular-datatables';
 import { TokenInterceptor } from './token.interceptor';
+import { CategoryAddComponent } from './categories/category-add/category-add.component';
 
 @NgModule({
   declarations: [
@@ -25,15 +26,16 @@ import { TokenInterceptor } from './token.interceptor';
     NavbarComponent,
     SidebarComponent,
     FooterComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    CategoryAddComponent
   ],
   imports: [
+    DataTablesModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    DataTablesModule
   ],
   providers: [
     AuthenticationService,
