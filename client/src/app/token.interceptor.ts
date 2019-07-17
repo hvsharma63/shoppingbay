@@ -15,7 +15,7 @@ export class TokenInterceptor implements HttpInterceptor {
         if (request.url.indexOf('/login') === -1) {
             request = request.clone({
                 setHeaders: {
-                    Authorization: `${this.auth.token}`
+                    Authorization: `${this.auth.getToken()}`
                 }
             });
         }

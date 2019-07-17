@@ -25,4 +25,16 @@ export class CategoriesService {
     public getCategoryById(id: number): Observable<any> {
         return this.http.get('http://localhost:3000/categories/' + id);
     }
+
+    public createCategory(category): Observable<any> {
+        return this.http.post('http://localhost:3000/categories/create', category);
+    }
+
+    public updateCategory(id, category): Observable<any> {
+        return this.http.put('http://localhost:3000/categories/' + id + '/update', category);
+    }
+
+    public deleteCategory(id): Observable<any> {
+        return this.http.delete('http://localhost:3000/categories/' + id + '/delete');
+    }
 }

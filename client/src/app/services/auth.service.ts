@@ -20,7 +20,7 @@ export interface TokenPayload {
 
 @Injectable()
 export class AuthenticationService {
-    public token: string;
+    private token: string;
     constructor(private http: HttpClient, private router: Router) { }
 
     private saveToken(token: string): void {
@@ -28,7 +28,7 @@ export class AuthenticationService {
         this.token = token;
     }
 
-    private getToken(): string {
+    public getToken(): string {
         if (!this.token) {
             this.token = localStorage.getItem('userToken');
         }

@@ -16,7 +16,19 @@ import { CategoriesComponent } from './categories/categories.component';
 import { DataTablesModule } from 'angular-datatables';
 import { TokenInterceptor } from './token.interceptor';
 import { CategoryAddComponent } from './categories/category-add/category-add.component';
-
+import { FileSelectDirective } from 'ng2-file-upload';
+import { ProductsComponent } from './products/products.component';
+import { ProductAddComponent } from './products/product-add/product-add.component';
+import { ProductUpdateComponent } from './products/product-update/product-update.component';
+import { ProductIndexComponent } from './products/product-index/product-index.component';
+import { OrdersComponent } from './orders/orders.component';
+import { OrderDetailsComponent } from './orders/order-details/order-details.component';
+import { OrderIndexComponent } from './orders/order-index/order-index.component';
+import { ProductRatingsComponent } from './product-ratings/product-ratings.component';
+import { ProductRatingsIndexComponent } from './product-ratings/product-ratings-index/product-ratings-index.component';
+import { DealsComponent } from './deals/deals.component';
+import { DealsIndexComponent } from './deals/deals-index/deals-index.component';
+import { DealsAddComponent } from './deals/deals-add/deals-add.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +39,20 @@ import { CategoryAddComponent } from './categories/category-add/category-add.com
     SidebarComponent,
     FooterComponent,
     CategoriesComponent,
-    CategoryAddComponent
+    CategoryAddComponent,
+    FileSelectDirective,
+    ProductsComponent,
+    ProductAddComponent,
+    ProductUpdateComponent,
+    ProductIndexComponent,
+    OrdersComponent,
+    OrderDetailsComponent,
+    OrderIndexComponent,
+    ProductRatingsComponent,
+    ProductRatingsIndexComponent,
+    DealsComponent,
+    DealsIndexComponent,
+    DealsAddComponent
   ],
   imports: [
     DataTablesModule,
