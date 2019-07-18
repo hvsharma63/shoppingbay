@@ -49,7 +49,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.catService.getCategoryById(id).subscribe((res) => {
       console.log(res);
       this.updateForm.patchValue({
-        name: res.name.toString(),
+        name: res.name,
         file: res.file,
         description: res.description
       });

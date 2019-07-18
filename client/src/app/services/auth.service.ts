@@ -61,13 +61,13 @@ export class AuthenticationService {
     }
 
     public register(user): Observable<any> {
-        const registeredUser = this.http.post('http://localhost:3000/users/register', user);
+        const registeredUser = this.http.post('http://localhost:3500/users/register', user);
         // console.log(registeredUser);
         return registeredUser;
     }
 
     public login(user: TokenPayload): Observable<any> {
-        const base = this.http.post('http://localhost:3000/users/login', user);
+        const base = this.http.post('http://localhost:3500/users/login', user);
         console.log(base);
         // console.log(user);
         const request = base.pipe(
@@ -81,7 +81,7 @@ export class AuthenticationService {
     }
 
     public profile(): Observable<any> {
-        return this.http.get(`http://localhost:3000/users/profile`);
+        return this.http.get(`http://localhost:3500/users/profile`);
     }
 
     public logout(): void {

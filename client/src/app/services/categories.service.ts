@@ -19,22 +19,26 @@ export class CategoriesService {
     constructor(private http: HttpClient) { }
 
     public getAllCategories(): Observable<object> {
-        return this.http.get('http://localhost:3000/categories');
+        return this.http.get('http://localhost:3500/categories');
     }
 
     public getCategoryById(id: number): Observable<any> {
-        return this.http.get('http://localhost:3000/categories/' + id);
+        return this.http.get('http://localhost:3500/categories/' + id);
     }
 
-    public createCategory(category): Observable<any> {
-        return this.http.post('http://localhost:3000/categories/create', category);
+    public createCategory(category: FormData): Observable<any> {
+        return this.http.post('http://localhost:3500/categories/create', category);
     }
 
-    public updateCategory(id, category): Observable<any> {
-        return this.http.put('http://localhost:3000/categories/' + id + '/update', category);
+    public updateCategory(id: string, category: any): Observable<any> {
+        return this.http.put('http://localhost:3500/categories/' + id + '/update', category);
     }
 
-    public deleteCategory(id): Observable<any> {
-        return this.http.delete('http://localhost:3000/categories/' + id + '/delete');
+    public deleteCategory(id: string | number): Observable<any> {
+        return this.http.delete('http://localhost:3500/categories/' + id + '/delete');
+    }
+
+    public getCategoriesByName(): Observable<any> {
+        return this.http.get('http://localhost:3500/categories/names');
     }
 }
