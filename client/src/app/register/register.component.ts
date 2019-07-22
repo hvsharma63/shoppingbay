@@ -13,6 +13,8 @@ export class RegisterComponent implements OnInit {
 
   registerationForm: FormGroup;
   password = '';
+  error: any;
+  success: string;
   constructor(private auth: AuthenticationService, private router: Router) { }
   userValidationMessages = {
     firstName: [
@@ -73,12 +75,16 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.registerationForm.invalid) {
+      return this.error = "Must fill all the fields"
+    }
     this.registerationForm.value.role = 'user';
     // console.log(this.registerationForm.value);
 
     this.auth.register(this.registerationForm.value)
       .subscribe((response) => {
         console.log(response);
+        this.success = "Registered Successfully";
       }
       );
   }
