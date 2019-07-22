@@ -26,8 +26,10 @@ export class CategoriesService {
         return this.http.get('http://localhost:3500/categories/' + id);
     }
 
-    public createCategory(category: FormData): Observable<any> {
-        return this.http.post('http://localhost:3500/categories/create', category);
+    public createCategory(categoryImage: FormData,category): Observable<any> {
+        console.log(categoryImage);        
+        console.log(category);        
+        return this.http.post('http://localhost:3500/categories/create', categoryImage,category);
     }
 
     public updateCategory(id: string, category: any): Observable<any> {
