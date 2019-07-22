@@ -1,15 +1,24 @@
 const express = require('express')
-var cors = require('cors')
-const jwt = require('jsonwebtoken')
-const db = require('../models/index')
-const bcrypt = require('bcrypt');
-const OrderProduct = require('../models/OrderProduct')
-const orderProducts = express.Router()
-orderProducts.use(cors())
+const cors = require('cors')
+const pool = require("../config/db")
+const auth = require('../middleware/authenticateUser')
+const orders = express.Router()
+
+orders.use(cors())
 
 process.env.SECRET_KEY = 'solution_analyst'
 
-orderProducts.get('/show', (req, res) => {
-    res.send("orderProducts API Called");
+// Get specific category
+orders.get('/:id', auth, (req, res) => {
+    console.log("CALLED FROM HERE");
+    pool.query(`SELECT * from OrderProducts WHERE orderId = ${req.params.id}`, (err, result) => {
+        if (err) res.status(500).send({ error: err })
+        if (result.length == 0) {
+            res.status(400).send({ message: 'No Details found by this Order\'s ID' })
+        } else {
+            res.status(200).send(result[0])
+        }
+    });
 })
-module.exports = orderProducts;
+
+module.exports = orders;

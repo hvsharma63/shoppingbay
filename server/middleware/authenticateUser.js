@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require('../models/User');
+const pool = require("../config/db")
 SECRET_KEY = 'solution_analyst'
 
 module.exports = function (req, res, next) {
@@ -12,20 +12,14 @@ module.exports = function (req, res, next) {
         return res.status(401).send("Access denied. No token provided.");
     } else {
         const decoded = jwt.verify(token, SECRET_KEY)
-
-        User.findOne({
-            where: {
-                id: decoded.id
-            }
-        }).then(user => {
-            if (user.role === 'admin') {
-                req.user = user
+        pool.query(`SELECT * from Users WHERE id = '${decoded.id}'`, (err, result) => {
+            if (err) res.status(500).send({ error: err })
+            if (result[0].role === 'admin') {
+                req.user = result[0]
                 next();
             } else {
-                return res.status(401).send("Access denied");
+                return res.status(401).send({ message: "Access denied" });
             }
-        }).catch(err => {
-            res.send('error: ' + err)
         })
     }
 };

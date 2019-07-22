@@ -2,90 +2,62 @@ const express = require('express')
 const users = express.Router()
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
-const db = require('../models/index')
 const bcrypt = require('bcrypt');
-const User = require('../models/User')
 const auth = require("../middleware/authenticateUser");
-
+const pool = require("../config/db")
 users.use(cors())
 
 process.env.SECRET_KEY = 'solution_analyst'
 
 // REGISTER
 users.post('/register', (req, res) => {
-    console.log(req.body);
-    const data = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        dob: req.body.dob,
-        email: req.body.email,
-        contact: req.body.contact,
-        password: req.body.password,
-        role: req.body.role,
-        profile: req.body.profile,
-        resetToken: req.body.resetToken,
-        shippingAddress: req.body.shippingAddress,
-        deliveryAddress: req.body.deliveryAddress,
-        createdAt: req.body.createdAt,
-    }
-
-    User.findOne({
-        where: {
-            email: req.body.email
-        }
-    }).then(user => {
-        console.log("from node" + user);
-        if (!user) {
-            const hash = bcrypt.hashSync(data.password, 10);
-            data.password = hash;
-            User.create(data)
-                .then(user => {
-                    res.status(200);
-                })
-                .catch(err => {
-                    res.send('error: ' + err)
-                })
+    pool.query(`SELECT * from Users WHERE email = '${req.body.email}'`, (err, result) => {
+        if (err) res.status(500).send({ error: err })
+        if (result.length == 0) {
+            const hash = bcrypt.hashSync(req.body.password, 10);
+            req.body.password = hash;
+            pool.query(`INSERT INTO Users(firstName, lastName, email, password, dob, profile, contact, role, createdAt)
+                        VALUES ('${req.body.firstName}', '${req.body.lastName}','${req.body.email}', '${req.body.password}', 
+                        '${req.body.dob}', '${req.body.profile}', ${req.body.contact},'${req.body.role}',CURDATE())`,
+                (err, result) => {
+                    if (err) res.status(500).send({ error: err })
+                    if (result) {
+                        res.status(200).send(result);
+                    }
+                }
+            )
         } else {
-            res.json({ error: 'User already exists' })
+            res.status(400).send({ message: 'User with this email already exists' })
         }
-    }).catch(err => {
-        res.send('error: ' + err)
-    })
+    });
+
 })
 
 // LOGIN
 users.post('/login', (req, res) => {
-    console.log("post called");
-    User.findOne({
-        where: {
-            email: req.body.email,
-        }
-    }).then(user => {
-        console.log(user.role);
-        if (user.role !== 'user') {
-            if (bcrypt.compareSync(req.body.password, user.password)) {
-                let token = jwt.sign({ id: JSON.stringify(user.id) }, process.env.SECRET_KEY, {
-                    expiresIn: 3600
-                })
-                res.json({ token: token })
-            } else {
-                res.send('Credentials might be wrong. Try Again :)') //User does not exist
-            }
+    pool.query(`SELECT * from Users WHERE email = '${req.body.email}'`, (err, result) => {
+        if (err) res.status(500).send({ error: err })
+        if (result.length == 0) {
+            res.status(500).send({ message: 'You must register your account first' })
         } else {
-            res.send('Not Allowed');
+            if (result[0].role !== 'user') {
+                if (bcrypt.compareSync(req.body.password, result[0].password)) {
+                    let token = jwt.sign({ id: JSON.stringify(result[0].id) }, process.env.SECRET_KEY, {
+                        expiresIn: 3600
+                    })
+                    res.status(200).send({ token: token })
+                } else {
+                    res.status(400).send({ message: 'Credentials might be wrong. Try Again :)' }) //User does not exist
+                }
+            } else {
+                res.status(400).send({ message: 'Not Allowed' });
+            }
         }
-    }).catch(err => {
-        if (err.toString().includes("TypeError")) {
-            res.send("Credentials might be wrong. Try Again :)")
-        }
-        res.send("error: " + err);
-    })
+    });
+
 })
 
-users.get('/something', auth, (req, res) => {
-    res.json("admin only")
-});
-
+// GET User Profile
 users.get('/profile', auth, (req, res) => {
     const user = req.user;
     // console.log("profile:", user.dataValues);
@@ -96,6 +68,26 @@ users.get('/profile', auth, (req, res) => {
         res.send('User does not exist')
     }
 
+})
+
+users.post('/changePassword', auth, (req, res) => {
+    pool.query(`SELECT * from Users WHERE id = ${req.body.id}`, (err, result) => {
+        if (err) res.status(500).send({ error: err })
+        if (result.length == 0) {
+            res.status(500).send({ message: 'You are not a registered user' })
+        } else {
+            if (bcrypt.compareSync(req.body.oldPassword, result[0].password)) {
+                const hash = bcrypt.hashSync(req.body.newPassword, 10);
+                req.body.newPassword = hash;
+                pool.query(`UPDATE Users SET password='${req.body.newPassword}' WHERE id = ${req.body.id};`, (err, result) => {
+                    if (err) res.status(500).send({ error: err })
+                    res.status(200).send({ message: 'Password changed successfully' })
+                })
+            } else {
+                res.status(400).send({ message: 'Credentials might be wrong. Try Again :)' }) //User does not exist
+            }
+        }
+    });
 })
 
 module.exports = users;

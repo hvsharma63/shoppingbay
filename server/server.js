@@ -2,7 +2,12 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3500
+const path = require('path');
+
+app.use("/assets", express.static(path.join(__dirname, 'assets')));
+// app.use("/assets/categoryImages", express.static(path.join("/assets/categoryImages")));
+// app.use(express.static('/assets/categoryImages'));
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -18,7 +23,6 @@ const Deals = require('./routes/Deals')
 const OrderProducts = require('./routes/OrderProducts')
 const Orders = require('./routes/Orders')
 const ProductImages = require('./routes/ProductImages')
-const ProductRatings = require('./routes/ProductRatings')
 const Products = require('./routes/Products')
 const Users = require('./routes/Users')
 const UserWishlist = require('./routes/UserWishlists')
@@ -29,7 +33,6 @@ app.use('/deals', Deals)
 app.use('/order/products', OrderProducts)
 app.use('/orders', Orders)
 app.use('/product/images', ProductImages)
-app.use('/product/ratings', ProductRatings)
 app.use('/products', Products)
 app.use('/users', Users)
 app.use('/user/wishlist', UserWishlist)
