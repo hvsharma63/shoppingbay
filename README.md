@@ -2,7 +2,7 @@
 A Simple E-Commerce Website built with Angular and Node
 
 ### Importing DB Instructions
-- Change directory to */server* and type *npx sequelize-cli db:migrate*
+- Change directory to */server* and type *npx sequelize-cli db:migrate* **OR** Import the database from *database* folder directly.
 - Register account and change the role to *admin* to access admin panel
 
 
