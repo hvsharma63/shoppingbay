@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
 import { CategoriesService } from '../services/categories.service';
 import { Subject } from 'rxjs';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormGroup, FormControl } from '@angular/forms';
+
 
 // import 'rxjs/add/operator/map';
 
@@ -18,7 +17,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   dtTrigger = new Subject();
   categoryId = null;
   updateForm: FormGroup;
-  constructor(private http: HttpClient, private catService: CategoriesService, private router: Router) { }
+  categoryImage: string;
+  error: any;
+  success: string;
+  constructor(private catService: CategoriesService) { }
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -33,7 +35,6 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.updateForm = new FormGroup({
       id: new FormControl(null),
       name: new FormControl(null),
-      file: new FormControl(null),
       description: new FormControl(null),
     });
   }
@@ -48,18 +49,23 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.categoryId = id;
     this.catService.getCategoryById(id).subscribe((res) => {
       console.log(res);
+      this.categoryImage = res.imagePath;
       this.updateForm.patchValue({
         name: res.name,
-        file: res.file,
         description: res.description
       });
     });
   }
 
   onSubmit() {
-    console.log(this.updateForm.value);
+    if (this.updateForm.invalid) {
+      return this.error = 'Must fill all values';
+    }
     this.catService.updateCategory(this.categoryId, this.updateForm.value).subscribe(res => {
       console.log(res);
+      this.success = 'Category Updated Successfully';
+    }, err => {
+      this.error = err.error.error.sqlMessage;
     });
     console.log('form updated');
   }
@@ -69,6 +75,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     if (decision) {
       this.catService.deleteCategory(id).subscribe(res => {
         console.log(res);
+        this.success = 'Category Deleted Successfully';
+
+      }, err => {
+        console.log(err);
+        this.error = err.error.error.sqlMessage;
       });
     } else {
       console.log('Nothing has changed');

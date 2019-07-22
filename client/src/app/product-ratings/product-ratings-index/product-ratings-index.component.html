@@ -1,1 +1,43 @@
-<p>product-ratings-index works!</p>
+<div class="content-wrapper">
+    <div class="row mt-4">
+        <div class="col-md-12 stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title">All Products Ratings</p>
+                    <div class="table-responsive">
+                        <table id="recent-purchases-listing" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table row-border hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Product</th>
+                                    <th>Rating</th>
+                                    <th>Given By</th>
+                                    <th>Created At:</th>
+                                    <th>Updated At: </th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="ratings">
+                                <tr *ngFor="let rating of ratings">
+                                    <td>{{ rating.id }}</td>
+                                    <td>{{ rating.product }}</td>
+                                    <td>{{ rating.rating }}</td>
+                                    <td>{{ rating.user }}</td>
+                                    <td>{{ rating.createdAt }}</td>
+                                    <td>{{ rating.updatedAt }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-md"
+                                            (click)="deleteRating(rating.id)">
+                                            DELETE
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

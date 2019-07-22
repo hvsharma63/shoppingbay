@@ -17,19 +17,30 @@ export class ProductsService {
         return this.http.get('http://localhost:3500/products/' + id);
     }
 
-    public createProduct(product): Observable<any> {
+    public createProduct(product: FormData): Observable<any> {
+        // tslint:disable-next-line: forin
+        for (const key in product) {
+            console.log(key, product[key]);
+        }
         return this.http.post('http://localhost:3500/products/create', product);
     }
 
     public updateProduct(id: string, product: any): Observable<any> {
-        return this.http.put('http://localhost:3500/categories/' + id + '/update', product);
+        console.log(id, product);
+
+        return this.http.put('http://localhost:3500/products/' + id + '/update', product);
     }
 
-    public deleteCategory(id: string | number): Observable<any> {
-        return this.http.delete('http://localhost:3500/categories/' + id + '/delete');
+    public deleteProduct(id: string | number): Observable<any> {
+        return this.http.delete('http://localhost:3500/products/' + id + '/delete');
     }
 
-    public getCategoriesByName(): Observable<any> {
-        return this.http.get('http://localhost:3500/categories/names');
+    public getAllProductsRating(): Observable<any> {
+        return this.http.get('http://localhost:3500/products/ratings');
     }
+
+    public deleteProductsRating(id: number): Observable<any> {
+        return this.http.delete('http://localhost:3500/products/' + id + '/rating/delete');
+    }
+
 }

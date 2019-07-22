@@ -22,13 +22,14 @@ import { ProductAddComponent } from './products/product-add/product-add.componen
 import { ProductUpdateComponent } from './products/product-update/product-update.component';
 import { ProductIndexComponent } from './products/product-index/product-index.component';
 import { OrdersComponent } from './orders/orders.component';
-import { OrderDetailsComponent } from './orders/order-details/order-details.component';
 import { OrderIndexComponent } from './orders/order-index/order-index.component';
 import { ProductRatingsComponent } from './product-ratings/product-ratings.component';
 import { ProductRatingsIndexComponent } from './product-ratings/product-ratings-index/product-ratings-index.component';
 import { DealsComponent } from './deals/deals.component';
 import { DealsIndexComponent } from './deals/deals-index/deals-index.component';
 import { DealsAddComponent } from './deals/deals-add/deals-add.component';
+import { DealsUpdateComponent } from './deals/deals-update/deals-update.component';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,13 +47,13 @@ import { DealsAddComponent } from './deals/deals-add/deals-add.component';
     ProductUpdateComponent,
     ProductIndexComponent,
     OrdersComponent,
-    OrderDetailsComponent,
     OrderIndexComponent,
     ProductRatingsComponent,
     ProductRatingsIndexComponent,
     DealsComponent,
     DealsIndexComponent,
-    DealsAddComponent
+    DealsAddComponent,
+    DealsUpdateComponent
   ],
   imports: [
     DataTablesModule,
@@ -63,6 +64,7 @@ import { DealsAddComponent } from './deals/deals-add/deals-add.component';
     ReactiveFormsModule,
   ],
   providers: [
+    DatePipe,
     AuthenticationService,
     {
       provide: HTTP_INTERCEPTORS,

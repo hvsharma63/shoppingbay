@@ -1,1 +1,179 @@
-<p>product-update works!</p>
+<div class="content-wrapper">
+    <div class="row mt-4">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Update Selected Product</h4>
+                    <form class="form-sample" [formGroup]="updateProduct" (ngSubmit)="onSubmit()">
+                        <p class="card-description">
+                            Fill up all the product related details carefully
+                        </p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert"
+                                    *ngIf="error">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        <span class="sr-only">Close</span>
+                                    </button>
+                                    <strong>{{error}}</strong>
+                                </div>
+                                <div class="mb-4 alert alert-success alert-dismissible fade show" role="alert"
+                                    *ngIf="success">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        <span class="sr-only">Close</span>
+                                    </button>
+                                    <strong>{{success}}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Product Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" formControlName="name" required />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.name">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('name').hasError(validation.type) && (updateProduct.get('name').dirty || updateProduct.get('name').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Select Category</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" formControlName="categoryId"
+                                            placeholder="something" required>
+                                            <option *ngFor="let category of categories" value="{{ category.id }}">
+                                                {{ category.name }}</option>
+                                        </select>
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.categoryId">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('categoryId').hasError(validation.type) && (updateProduct.get('categoryId').dirty || updateProduct.get('categoryId').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Product Description</label>
+                                    <div class="col-sm-9">
+                                        <textarea class="form-control" id="exampleTextarea1" rows="4"
+                                            formControlName="description" required></textarea>
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.description">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('description').hasError(validation.type) && (updateProduct.get('description').dirty || updateProduct.get('description').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Product SKU</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" formControlName="sku" required />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.sku">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('sku').hasError(validation.type) && (updateProduct.get('sku').dirty || updateProduct.get('sku').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Uploaded Product Image</label>
+                                    <div class="col-sm-9 mt-3">
+                                        <img src="{{productImage}}" class="img-fluid" alt="" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Price</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" formControlName="price" required />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.price">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('price').hasError(validation.type) && (updateProduct.get('price').dirty || updateProduct.get('price').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Stock</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" formControlName="stock" required />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.stock">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('stock').hasError(validation.type) && (updateProduct.get('stock').dirty || updateProduct.get('stock').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Stock Availablity</label>
+                                    <div class="col-sm-4 mt-2">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="stockAvailability"
+                                                    value="true">
+                                                Yes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 mt-2">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="stockAvailability"
+                                                    value="false">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger"
+                                        *ngFor="let validation of productValidationMessages.stockAvailability">
+                                        <span class="text-danger"
+                                            *ngIf="updateProduct.get('stockAvailability').hasError(validation.type) && (updateProduct.get('stockAvailability').dirty || updateProduct.get('stockAvailability').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" [disabled]="!updateProduct.valid" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

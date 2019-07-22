@@ -1,5 +1,23 @@
 <div class="content-wrapper">
     <div class="row">
+        <div class="col-md-12">
+            <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>{{error}}</strong>
+            </div>
+            <div class="mb-4 alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>{{success}}</strong>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12 stretch-card">
             <div class="card">
                 <div class="card-body">
@@ -29,7 +47,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody *ngIf="categories">
+                            <tbody>
                                 <tr *ngFor="let category of categories">
                                     <td>{{ category.id }}</td>
                                     <td>{{ category.name }}</td>
@@ -76,9 +94,7 @@
                                     aria-label="Username" formControlName="name">
                             </div>
                             <div class="form-group">
-                                <label>Category Image</label>
-                                <input type="file" class="form-control" placeholder="Username" aria-label="Username"
-                                    formControlName="file">
+                                <img src="{{categoryImage}}" class="img-fluid" alt="">
                             </div>
                             <div class="form-group">
                                 <label>Category Description</label>
@@ -86,9 +102,9 @@
                                     formControlName="description"></textarea>
                             </div>
                             <div class="form-group">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="ml-3 btn btn-primary"
+                                <button type="submit" class="btn btn-primary"
                                     [disabled]="!updateForm.valid">Update</button>
+                                <button type="button" class="ml-3 btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </form>
                     </div>

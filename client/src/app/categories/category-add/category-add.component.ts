@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CategoriesService } from 'src/app/services/categories.service';
 
 @Component({
@@ -8,29 +8,55 @@ import { CategoriesService } from 'src/app/services/categories.service';
   styleUrls: ['./category-add.component.css']
 })
 export class CategoryAddComponent implements OnInit {
-  constructor(private catService: CategoriesService, private formBuilder: FormBuilder) { }
-
-  categoryAdd: FormGroup;
+  constructor(private catService: CategoriesService) { }
   selectedFile: File;
-
+  error = null;
+  success = null;
+  categoryAdd: FormGroup;
+  categoryValidationMessages = {
+    name: [
+      { type: 'required', message: 'Required' },
+    ],
+    description: [
+      { type: 'required', message: 'Required' },
+      { type: 'minlength', message: 'must write atleast 25 chars' },
+    ],
+    imagePath: [
+      { type: 'required', message: 'Image is required for promotion' }
+    ]
+  };
   ngOnInit() {
     this.categoryAdd = new FormGroup({
-      name: new FormControl(null, Validators.required),
-      imagePath: new FormControl(null, Validators.required),
-      description: new FormControl(null, Validators.required),
+      name: new FormControl(null, [Validators.required]),
+      description: new FormControl(null, [Validators.required, Validators.minLength(25)]),
+      imagePath: new FormControl(null, Validators.required)
     });
   }
-
-  onFileChange(event) {
-    this.selectedFile = event.target.files[0];
-  }
-
   onSubmit() {
+    if (this.categoryAdd.invalid) {
+      return this.error = 'Must fill all values';
+    }
     const uploadData = new FormData();
     uploadData.append('categoryImage', this.selectedFile, this.selectedFile.name);
-    this.catService.createCategory(uploadData,this.categoryAdd.value).subscribe(res=>{
-      console.log(res);
-    })
+    uploadData.append('name', this.categoryAdd.get('name').value);
+    uploadData.append('description', this.categoryAdd.get('description').value);
+    uploadData.append('imagePath', this.categoryAdd.get('imagePath').value);
+
+    this.catService.createCategory(uploadData).subscribe(res => {
+      this.success = 'Category created Successfully';
+    },
+      err => {
+        console.log(err);
+        if (err.message.includes('Unknown')) {
+          this.error = 'Something went wrong';
+        } else {
+          this.error = err.error.message;
+        }
+      });
   }
 
+  onFileChanged(event) {
+    this.selectedFile = event.target.files[0];
+    console.log(this.selectedFile);
+  }
 }

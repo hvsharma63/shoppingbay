@@ -5,16 +5,44 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Add Product</h4>
-                    <form class="form-sample" [formGroup]="newProduct" (ngSubmit)="onSubmit()">
+                    <form class="form-sample" [formGroup]="newProduct" (ngSubmit)="onSubmit()"
+                        enctype="multipart/form-data">
                         <p class="card-description">
                             Fill up all the product related details carefully
                         </p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert"
+                                    *ngIf="error">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        <span class="sr-only">Close</span>
+                                    </button>
+                                    <strong>{{error}}</strong>
+                                </div>
+                                <div class="mb-4 alert alert-success alert-dismissible fade show" role="alert"
+                                    *ngIf="success">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        <span class="sr-only">Close</span>
+                                    </button>
+                                    <strong>{{success}}</strong>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Product Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" formControlName="name" />
+                                        <input type="text" class="form-control" formControlName="name" required />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.name">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('name').hasError(validation.type) && (newProduct.get('name').dirty || newProduct.get('name').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -22,11 +50,18 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Select Category</label>
                                     <div class="col-sm-9">
-                                        <select class="form-control" formControlName="categoryId"
-                                            placeholder="something">
+                                        <select class="form-control" formControlName="categoryId" required>
+                                            <option value="null">Select From Options</option>
                                             <option *ngFor="let category of categories" value="{{ category.id }}">
                                                 {{ category.name }}</option>
                                         </select>
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.categoryId">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('categoryId').hasError(validation.type) && (newProduct.get('categoryId').dirty || newProduct.get('categoryId').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -37,7 +72,14 @@
                                     <label class="col-sm-3 col-form-label">Product Description</label>
                                     <div class="col-sm-9">
                                         <textarea class="form-control" id="exampleTextarea1" rows="4"
-                                            formControlName="description"></textarea>
+                                            formControlName="description" required></textarea>
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.description">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('description').hasError(validation.type) && (newProduct.get('description').dirty || newProduct.get('description').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +87,15 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Product SKU</label>
                                     <div class="col-sm-9">
-                                        <input class="form-control" type="text" formControlName="sku" />
+                                        <input class="form-control" type="text" formControlName="sku" required
+                                            minlength="5" />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.sku">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('sku').hasError(validation.type) && (newProduct.get('sku').dirty || newProduct.get('sku').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +105,15 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Upload Product Image</label>
                                     <div class="col-sm-9 mt-3">
-                                        <input type="file" class="form-control-file" formControlName="imagePath">
+                                        <input type="file" class="form-control-file" formControlName="imagePath"
+                                            (change)="onFileChanged($event)" required>
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.imagePath">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('imagePath').hasError(validation.type) && (newProduct.get('imagePath').dirty || newProduct.get('imagePath').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +121,14 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Price</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" formControlName="price" />
+                                        <input type="number" class="form-control" formControlName="price" required />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.price">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('price').hasError(validation.type) && (newProduct.get('price').dirty || newProduct.get('price').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +138,14 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Stock</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" formControlName="stock" />
+                                        <input type="text" class="form-control" formControlName="stock" required />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.stock">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('stock').hasError(validation.type) && (newProduct.get('stock').dirty || newProduct.get('stock').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +158,7 @@
                                             <label class="form-check-label">
                                                 <input type="radio" class="form-check-input"
                                                     formControlName="stockAvailability" name="stockAvailability"
-                                                    value="true" checked>
+                                                    value="true" required>
                                                 Yes
                                             </label>
                                         </div>
@@ -96,11 +168,18 @@
                                             <label class="form-check-label">
                                                 <input type="radio" class="form-check-input"
                                                     formControlName="stockAvailability" name="stockAvailability"
-                                                    value="false">
+                                                    value="false" required>
                                                 No
                                             </label>
                                         </div>
                                     </div>
+                                    <span class="text-danger"
+                                        *ngFor="let validation of productValidationMessages.stockAvailability">
+                                        <span class="text-danger"
+                                            *ngIf="newProduct.get('stockAvailability').hasError(validation.type) && (newProduct.get('stockAvailability').dirty || newProduct.get('stockAvailability').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>

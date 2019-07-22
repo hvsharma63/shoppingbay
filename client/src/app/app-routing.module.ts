@@ -12,12 +12,12 @@ import { ProductUpdateComponent } from './products/product-update/product-update
 import { ProductIndexComponent } from './products/product-index/product-index.component';
 import { OrdersComponent } from './orders/orders.component';
 import { OrderIndexComponent } from './orders/order-index/order-index.component';
-import { OrderDetailsComponent } from './orders/order-details/order-details.component';
 import { ProductRatingsComponent } from './product-ratings/product-ratings.component';
 import { ProductRatingsIndexComponent } from './product-ratings/product-ratings-index/product-ratings-index.component';
 import { DealsComponent } from './deals/deals.component';
 import { DealsIndexComponent } from './deals/deals-index/deals-index.component';
 import { DealsAddComponent } from './deals/deals-add/deals-add.component';
+import { DealsUpdateComponent } from './deals/deals-update/deals-update.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full' },
@@ -72,10 +72,6 @@ const routes: Routes = [
             path: 'index',
             component: OrderIndexComponent
           },
-          {
-            path: ':id/details',
-            component: OrderDetailsComponent
-          },
         ]
       },
       {
@@ -110,6 +106,10 @@ const routes: Routes = [
           {
             path: 'add',
             component: DealsAddComponent
+          },
+          {
+            path: ':id/update',
+            component: DealsUpdateComponent
           }
         ]
       }

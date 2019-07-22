@@ -1,4 +1,22 @@
 <div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>{{error}}</strong>
+            </div>
+            <div class="mb-4 alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>{{success}}</strong>
+            </div>
+        </div>
+    </div>
     <div class="row mt-4">
         <div class="col-md-12 stretch-card">
             <div class="card">
@@ -37,11 +55,10 @@
                                     <td>{{ product.stock }}</td>
                                     <td>{{ product.stockAvailability }}</td>
                                     <td>{{ product.createdAt }}</td>
-                                    <td>{{ product.updatedAt ? null : "Not Updated Yet" }}</td>
+                                    <td>{{ product.updatedAt  }}</td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-md"
-                                            [routerLink]="['../'+ product.id + '/update']"
-                                            routerLinkActive="router-link-active">
+                                            [routerLink]="['../'+ product.id + '/update']">
                                             UPDATE
                                         </button>
                                         <button type="button" class="btn btn-danger btn-md"

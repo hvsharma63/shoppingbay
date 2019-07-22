@@ -9,16 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  // credentials: TokenPayload = {
-  //   id: 0,
-  //   firstName: '',
-  //   lastName: '',
-  //   dob: '',
-  //   contact: '',
-  //   email: '',
-  //   password: '',
-  //   role: ''
-  // };
+
   error = null;
   constructor(private auth: AuthenticationService, private router: Router) { }
   loginForm: FormGroup;
@@ -39,14 +30,21 @@ export class LoginComponent implements OnInit {
   }
   onSubmit() {
     // tslint:disable-next-line: label-position
+    if (!this.loginForm.valid) {
+      return this.error = 'Something is wrong with your credentials, try again!';
+    }
     const credentials = this.loginForm.value;
     this.auth.login(credentials).subscribe(
       () => {
         this.router.navigateByUrl('admin/dashboard');
       },
       err => {
-        console.log(err.error.text);
-        this.error = err.error.text;
+        console.log(err);
+        if (err.message.includes('Unknown')) {
+          this.error = 'Something went wrong';
+        } else {
+          this.error = err.error.message;
+        }
       }
     );
   }

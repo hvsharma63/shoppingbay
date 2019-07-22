@@ -74,13 +74,12 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     this.registerationForm.value.role = 'user';
-    console.log(this.registerationForm.value);
-    delete(this.registerationForm.value.confirmPassword);
-    delete(this.registerationForm.value.terms);
+    // console.log(this.registerationForm.value);
+
     this.auth.register(this.registerationForm.value)
       .subscribe((response) => {
         console.log(response);
       }
-    );
+      );
   }
 }

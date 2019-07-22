@@ -3,7 +3,7 @@
         <div class="col-12 grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Add New Deal</h4>
+                    <h4 class="card-title">Update a Specific Deal</h4>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <form class="form-sample" [formGroup]="addDeal" (ngSubmit)="onSubmit()">
+                    <form class="form-sample" [formGroup]="updateDeal" (ngSubmit)="onSubmit()">
                         <p class="card-description">
                             Fill up all the product related details carefully
                         </p>
@@ -36,7 +36,7 @@
                                         <span class="text-danger"
                                             *ngFor="let validation of dealsValidationMessages.name">
                                             <span class="text-danger"
-                                                *ngIf="addDeal.get('name').hasError(validation.type) && (addDeal.get('name').dirty || addDeal.get('name').touched)">
+                                                *ngIf="updateDeal.get('name').hasError(validation.type) && (updateDeal.get('name').dirty || updateDeal.get('name').touched)">
                                                 {{validation.message}}
                                             </span>
                                         </span>
@@ -47,15 +47,15 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Select Product</label>
                                     <div class="col-sm-9">
-                                        <select class="form-control" formControlName="productId"
-                                            placeholder="something">
+                                        <select class="form-control" formControlName="productId" placeholder="something"
+                                            required>
                                             <option *ngFor="let product of products" value="{{ product.id }}">
                                                 {{ product.name }}</option>
                                         </select>
                                         <span class="text-danger"
                                             *ngFor="let validation of dealsValidationMessages.productId">
                                             <span class="text-danger"
-                                                *ngIf="addDeal.get('productId').hasError(validation.type) && (addDeal.get('productId').dirty || addDeal.get('productId').touched)">
+                                                *ngIf="updateDeal.get('productId').hasError(validation.type) && (updateDeal.get('productId').dirty || updateDeal.get('productId').touched)">
                                                 {{validation.message}}
                                             </span>
                                         </span>
@@ -72,7 +72,7 @@
                                         <span class="text-danger"
                                             *ngFor="let validation of dealsValidationMessages.startDate">
                                             <span class="text-danger"
-                                                *ngIf="addDeal.get('startDate').hasError(validation.type) && (addDeal.get('startDate').dirty || addDeal.get('startDate').touched)">
+                                                *ngIf="updateDeal.get('startDate').hasError(validation.type) && (updateDeal.get('startDate').dirty || updateDeal.get('startDate').touched)">
                                                 {{validation.message}}
                                             </span>
                                         </span>
@@ -87,7 +87,7 @@
                                         <span class="text-danger"
                                             *ngFor="let validation of dealsValidationMessages.endDate">
                                             <span class="text-danger"
-                                                *ngIf="addDeal.get('endDate').hasError(validation.type) && (addDeal.get('endDate').dirty || addDeal.get('endDate').touched)">
+                                                *ngIf="updateDeal.get('endDate').hasError(validation.type) && (updateDeal.get('endDate').dirty || updateDeal.get('endDate').touched)">
                                                 {{validation.message}}
                                             </span>
                                         </span>
@@ -104,7 +104,7 @@
                                         <span class="text-danger"
                                             *ngFor="let validation of dealsValidationMessages.discount">
                                             <span class="text-danger"
-                                                *ngIf="addDeal.get('discount').hasError(validation.type) && (addDeal.get('discount').dirty || addDeal.get('discount').touched)">
+                                                *ngIf="updateDeal.get('discount').hasError(validation.type) && (updateDeal.get('discount').dirty || updateDeal.get('discount').touched)">
                                                 {{validation.message}}
                                             </span>
                                         </span>
@@ -112,7 +112,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" [disabled]="!addDeal.valid" class="btn btn-primary">Submit</button>
+                        <button type="submit" [disabled]="!updateDeal.valid" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>

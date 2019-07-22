@@ -2,6 +2,20 @@
     <div class="col-md-12 grid-margin">
         <div class="card">
             <div class="card-body">
+                <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <strong>{{error}}</strong>
+                </div>
+                <div class="mb-4 alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <strong>{{success}}</strong>
+                </div>
                 <h4 class="card-title">ADD New Category</h4>
                 <form class="form-sample" [formGroup]="categoryAdd" (ngSubmit)="onSubmit()"
                     enctype="multipart/form-data">
@@ -11,6 +25,13 @@
                                 <label class="col-sm-3 col-form-label">Name: </label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" formControlName="name" required />
+                                    <span class="text-danger"
+                                        *ngFor="let validation of categoryValidationMessages.name">
+                                        <span class="text-danger"
+                                            *ngIf="categoryAdd.get('name').hasError(validation.type) && (categoryAdd.get('name').dirty || categoryAdd.get('name').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -19,7 +40,14 @@
                                 <label class="col-sm-3 col-form-label">Description: </label>
                                 <div class="col-sm-9">
                                     <textarea name="" id="" class="form-control" cols=" 30" rows="4"
-                                        formControlName="description" required></textarea>
+                                        formControlName="description" required minlength="25"></textarea>
+                                    <span class="text-danger"
+                                        *ngFor="let validation of categoryValidationMessages.description">
+                                        <span class="text-danger"
+                                            *ngIf="categoryAdd.get('description').hasError(validation.type) && (categoryAdd.get('description').dirty || categoryAdd.get('description').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -27,27 +55,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <input type="file" class="form-control-file" name="" id="" placeholder=""
-                                    aria-describedby="fileHelpId" formControlName="imagePath"
-                                    (change)="onFileChange($event)">
+                                <input type="file" class="form-control-file" aria-describedby="fileHelpId"
+                                    formControlName="imagePath" (change)="onFileChanged($event)" required>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <input type="file" name="photo" ng2FileSelect [uploader]="uploader"
-                                    formControlName="imagePath" required />
-
-                                <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()"
-                                    [disabled]="!uploader.getNotUploadedItems().length">
-                                    Upload an Image
-                                </button>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="row">
-                        <button type="submit" class="btn btn-primary" [disabled]="!categoryAdd.valid">Submit</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="categoryAdd.invalid">Submit</button>
                         <button type="button" class="ml-3 btn btn-danger" [routerLink]="['..']"
                             routerLinkActive="router-link-active">Cancel</button>
                     </div>
