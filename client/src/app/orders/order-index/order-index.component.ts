@@ -24,7 +24,6 @@ export class OrderIndexComponent implements OnInit, OnDestroy {
     });
   }
   getOrderId(id: number) {
-    console.log(id);
     this.orderService.getSingleOrderDetails(id).subscribe(resp => {
       this.singleOrders = resp;
     });

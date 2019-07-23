@@ -70,7 +70,6 @@ export class ProductUpdateComponent implements OnInit {
 
       this.productService.getProductById(params.id).subscribe(res => {
         this.productId = params.id;
-        console.log(res, String(res.price), String(res.stock), res.stockAvailability);
         this.productImage = res.imagePath;
         this.updateProduct.patchValue({
           name: res.name,
@@ -87,8 +86,6 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.updateProduct.value);
-    console.log(this.productId);
     if (this.updateProduct.invalid) {
       return this.error = 'Must fill all values';
     }
@@ -96,7 +93,6 @@ export class ProductUpdateComponent implements OnInit {
       this.success = 'Product Updated Successfully';
     },
       err => {
-        console.log(err);
         if (err.message.includes('Unknown')) {
           this.error = 'Something went wrong';
         } else {

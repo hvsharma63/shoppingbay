@@ -27,7 +27,6 @@ export class DealsIndexComponent implements OnInit, OnDestroy {
 
   deleteDeal(id: number) {
     this.dealsService.deleteDeal(id).subscribe(res => {
-      console.log(res);
 
       this.success = 'Deal Deleted Successfully';
     });

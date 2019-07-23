@@ -50,7 +50,6 @@ export class DealsAddComponent implements OnInit {
     if (this.addDeal.invalid) {
       return this.error = 'Must fill all values';
     }
-    console.log(this.addDeal.value);
     this.dealsService.createDeal(this.addDeal.value).subscribe(response => {
       this.success = 'Deal created Successfully';
     }, err => {

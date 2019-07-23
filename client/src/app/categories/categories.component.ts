@@ -49,7 +49,6 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   getCategoryDetails(id: number) {
     this.categoryId = id;
     this.catService.getCategoryById(id).subscribe((res) => {
-      console.log(res);
       this.categoryImage = res.imagePath;
       this.updateForm.patchValue({
         name: res.name,
@@ -64,7 +63,6 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       return this.error = 'Must fill all values';
     }
     this.catService.updateCategory(this.categoryId, this.updateForm.value).subscribe(res => {
-      console.log(res);
       this.success = 'Category Updated Successfully';
     }, err => {
       this.error = err.error.error.sqlMessage;
@@ -76,11 +74,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     const decision = confirm('Are you sure you want to delete?');
     if (decision) {
       this.catService.deleteCategory(id).subscribe(res => {
-        console.log(res);
         this.success = 'Category Deleted Successfully';
 
       }, err => {
-        console.log(err);
         this.error = err.error.error.sqlMessage;
       });
     } else {

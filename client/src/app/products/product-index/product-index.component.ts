@@ -23,7 +23,6 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
     this.productService.getAllProducts().subscribe(products => {
       this.products = products;
       this.dtTrigger.next();
-      console.log(this.products);
     });
 
   }
@@ -31,11 +30,9 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
     const decision = confirm('Are you sure you want to delete?');
     if (decision) {
       this.productService.deleteProduct(id).subscribe(res => {
-        console.log(res);
         this.success = 'Product Deleted Successfully';
 
       }, err => {
-        console.log(err);
         this.error = err.error.error.sqlMessage;
       });
     } else {
