@@ -31,12 +31,12 @@ module.exports = {
       imagePath: {
         type: Sequelize.STRING
       },
-      stock: {
-        type: Sequelize.BIGINT
-      },
       stockAvailability: {
         allowNull: false,
         type: Sequelize.ENUM('yes', 'no')
+      },
+      stock: {
+        type: Sequelize.BIGINT
       },
       views: {
         allowNull: true,
