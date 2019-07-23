@@ -1,24 +1,7 @@
 <div class="container-scroller">
+
     <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="content-wrapper d-flex align-items-center auth px-0">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <strong>{{error}}</strong>
-                    </div>
-                    <div class="mb-4 alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <strong>{{success}}</strong>
-                    </div>
-                </div>
-            </div>
             <div class="row w-100 mx-0">
                 <div class="col-lg-5 mx-auto">
                     <div class="auth-form-light text-left py-5 px-4 px-sm-5">
@@ -130,6 +113,26 @@
                             <div class="text-center mt-4 font-weight-light">
                                 Already have an account? <a [routerLink]="['/login']" routerLinkActive=""
                                     class="text-primary">Login</a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert"
+                                        *ngIf="error">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            <span class="sr-only">Close</span>
+                                        </button>
+                                        <strong>{{ error }}</strong>
+                                    </div>
+                                    <div class="mb-4 alert alert-success alert-dismissible fade show" role="alert"
+                                        *ngIf="success">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            <span class="sr-only">Close</span>
+                                        </button>
+                                        <strong>{{success}}</strong>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>

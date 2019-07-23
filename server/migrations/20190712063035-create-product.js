@@ -31,6 +31,13 @@ module.exports = {
       imagePath: {
         type: Sequelize.STRING
       },
+      stock: {
+        type: Sequelize.BIGINT
+      },
+      stockAvailability: {
+        allowNull: false,
+        type: Sequelize.ENUM('yes', 'no')
+      },
       views: {
         allowNull: true,
         type: Sequelize.INTEGER
