@@ -19,3 +19,7 @@ A Simple E-Commerce Website built with Angular and Node
 ### To-Do
 #### Admin Panel
 - [ ] NodeJS Validations
+
+### NOTE
+#### Admin Panel
+-  Order, OrderProducts and Ratings API have been created but will be called from client side. Read-only permissions are given to admin.
