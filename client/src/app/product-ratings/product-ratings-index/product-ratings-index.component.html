@@ -24,8 +24,10 @@
                                     <td>{{ rating.product }}</td>
                                     <td>{{ rating.rating }}</td>
                                     <td>{{ rating.user }}</td>
-                                    <td>{{ rating.createdAt.split("T")[0] }}</td>
-                                    <td>{{ rating.updatedAt.split("T")[0] }}</td>
+                                    <td>{{ rating.createdAt ?  rating.createdAt.split('T')[0] : 'Not Created Yet' }}
+                                    </td>
+                                    <td>{{ rating.updatedAt ?  rating.updatedAt.split('T')[0] : 'Not Updated Yet' }}
+                                    </td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-md"
                                             (click)="deleteRating(rating.id)">

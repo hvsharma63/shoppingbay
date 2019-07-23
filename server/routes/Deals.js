@@ -21,7 +21,10 @@ deals.get('', auth, (req, res) => {
 
 // Create a Deal
 deals.post('/create', auth, (req, res) => {
+    console.log(req.body);
     pool.query(`SELECT * from Deals WHERE name = '${req.body.name}'`, (err, result) => {
+        console.log(result);
+        if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
             pool.query(`INSERT INTO Deals (name, productId, discount, startDate, endDate, createdAt)
                         VALUES ('${req.body.name}', ${req.body.productId}, ${req.body.discount}, '${req.body.startDate}', '${req.body.endDate}', CURDATE())`,

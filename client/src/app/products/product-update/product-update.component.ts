@@ -58,6 +58,7 @@ export class ProductUpdateComponent implements OnInit {
       categoryId: new FormControl(null, Validators.required),
       description: new FormControl(null, Validators.required),
       sku: new FormControl(null, [Validators.required, Validators.minLength(5), Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
+      imagePath: new FormControl(null),
       price: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
       stock: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
       stockAvailability: new FormControl(null, Validators.required),
@@ -76,6 +77,7 @@ export class ProductUpdateComponent implements OnInit {
           categoryId: res.categoryId,
           description: res.description,
           sku: res.sku,
+          imagePath: res.imagePath,
           price: res.price,
           stock: String(res.stock),
           stockAvailability: res.stockAvailability,
@@ -92,15 +94,13 @@ export class ProductUpdateComponent implements OnInit {
     }
     this.productService.updateProduct(this.productId, this.updateProduct.value).subscribe(res => {
       this.success = 'Product Updated Successfully';
-      console.log(res);
-
     },
       err => {
         console.log(err);
         if (err.message.includes('Unknown')) {
           this.error = 'Something went wrong';
         } else {
-          this.error = err.error.message;
+          this.error = err.error.error.sqlMessage;
         }
       });
 

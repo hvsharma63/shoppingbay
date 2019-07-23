@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     if (this.registerationForm.invalid) {
-      return this.error = "Must fill all the fields"
+      return this.error = 'Must fill all the fields';
     }
     this.registerationForm.value.role = 'user';
     // console.log(this.registerationForm.value);
@@ -84,7 +84,7 @@ export class RegisterComponent implements OnInit {
     this.auth.register(this.registerationForm.value)
       .subscribe((response) => {
         console.log(response);
-        this.success = "Registered Successfully";
+        this.success = 'Registered Successfully';
       }
       );
   }

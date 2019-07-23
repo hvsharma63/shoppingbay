@@ -46,8 +46,8 @@
                                     <td>{{ deal.discount }}</td>
                                     <td>{{ deal.startDate }}</td>
                                     <td>{{ deal.endDate }}</td>
-                                    <td>{{ deal.createdAt.split("T")[0] }}</td>
-                                    <td>{{ deal.updatedAt.split("T")[0] }}</td>
+                                    <td>{{ deal.createdAt ?  deal.createdAt.split('T')[0] : 'Not Created Yet'  }}</td>
+                                    <td>{{ deal.updatedAt ?  deal.updatedAt.split('T')[0] : 'Not Updated Yet' }}</td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-md" data-toggle="modal"
                                             data-target="#modelId" [routerLink]="['../'+ deal.id + '/update']">

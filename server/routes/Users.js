@@ -5,12 +5,14 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const auth = require("../middleware/authenticateUser");
 const pool = require("../config/db")
+const validator = require("validator")
 users.use(cors())
 
 process.env.SECRET_KEY = 'solution_analyst'
 
 // REGISTER
 users.post('/register', (req, res) => {
+
     pool.query(`SELECT * from Users WHERE email = '${req.body.email}'`, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {

@@ -103,6 +103,7 @@
                                     <label class="col-sm-3 col-form-label">Uploaded Product Image</label>
                                     <div class="col-sm-9 mt-3">
                                         <img src="{{productImage}}" class="img-fluid" alt="" required>
+                                        <input type="hidden" formControlName="imagePath">
                                     </div>
                                 </div>
                             </div>
@@ -145,8 +146,8 @@
                                     <div class="col-sm-4 mt-2">
                                         <div class="form-check">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="stockAvailability"
-                                                    value="true">
+                                                <input type="radio" class="form-check-input"
+                                                    formControlName="stockAvailability" value="yes">
                                                 Yes
                                             </label>
                                         </div>
@@ -154,8 +155,8 @@
                                     <div class="col-sm-5 mt-2">
                                         <div class="form-check">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="stockAvailability"
-                                                    value="false">
+                                                <input type="radio" class="form-check-input"
+                                                    formControlName="stockAvailability" value="no">
                                                 No
                                             </label>
                                         </div>

@@ -3,7 +3,7 @@ const cors = require('cors')
 const pool = require("../config/db")
 const auth = require('../middleware/authenticateUser')
 const categories = express.Router()
-
+const validator = require('validator')
 // Image Upload Configs
 const multer = require('multer');
 const MIME_TYPE_MAP = {

@@ -54,8 +54,10 @@
                                     <td>{{ product.views ? null : 'NULL'  }}</td>
                                     <td>{{ product.stock }}</td>
                                     <td>{{ product.stockAvailability }}</td>
-                                    <td>{{ product.createdAt.split("T")[0] }}</td>
-                                    <td>{{ product.updatedAt.split("T")[0] }}</td>
+                                    <td>{{ product.createdAt ?  product.createdAt.split('T')[0] : 'NULL'  }}
+                                    </td>
+                                    <td>{{ product.updatedAt ?  product.updatedAt.split('T')[0] : 'Not Updated Yet' }}
+                                    </td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-md"
                                             [routerLink]="['../'+ product.id + '/update']">

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DealsService } from 'src/app/services/deals.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
   selector: 'app-deals-add',
@@ -12,7 +11,7 @@ export class DealsAddComponent implements OnInit {
   addDeal: FormGroup;
   error: string;
   success: string;
-  constructor(private dealsService: DealsService, private productsService: ProductsService) { }
+  constructor(private dealsService: DealsService) { }
 
   products = [];
   dealsValidationMessages = {
@@ -54,6 +53,8 @@ export class DealsAddComponent implements OnInit {
     console.log(this.addDeal.value);
     this.dealsService.createDeal(this.addDeal.value).subscribe(response => {
       this.success = 'Deal created Successfully';
+    }, err => {
+      this.error = err.error.error.sqlMessage;
     });
   }
 }

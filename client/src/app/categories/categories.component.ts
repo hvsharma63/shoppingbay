@@ -35,6 +35,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.updateForm = new FormGroup({
       id: new FormControl(null),
       name: new FormControl(null),
+      imagePath: new FormControl(null),
       description: new FormControl(null),
     });
   }
@@ -52,6 +53,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       this.categoryImage = res.imagePath;
       this.updateForm.patchValue({
         name: res.name,
+        imagePath: res.imagePath,
         description: res.description
       });
     });

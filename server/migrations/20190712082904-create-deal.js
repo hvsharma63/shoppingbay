@@ -8,6 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       productId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -16,7 +20,7 @@ module.exports = {
           key: 'id'
         }
       },
-      discountPrice: {
+      discount: {
         type: Sequelize.DOUBLE
       },
       startDate: {

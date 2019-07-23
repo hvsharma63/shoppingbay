@@ -130,11 +130,9 @@ products.put('/:id/update', auth, (req, res) => {
     req.body.price = parseFloat(req.body.price);
     req.body.stock = parseInt(req.body.stock);
     console.log(req.body);
-
     pool.query(`UPDATE Products SET name='${req.body.name}', categoryId=${req.body.categoryId},
-    description='${req.body.description}', sku='${req.body.sku}', price=${req.body.price},
-    stock=${req.body.stock},stockAvailability=${req.body.stockAvailability}, 
-    updatedAt=CURDATE() WHERE id=${req.params.id}`,
+    description='${req.body.description}', sku='${req.body.sku}',imagePath='${req.body.imagePath}', price=${req.body.price},
+    stock=${req.body.stock},stockAvailability='${req.body.stockAvailability}',updatedAt=CURDATE() WHERE id=${req.params.id}`,
         (err, result) => {
             if (err) res.status(500).send({ error: err })
             if (result) {
