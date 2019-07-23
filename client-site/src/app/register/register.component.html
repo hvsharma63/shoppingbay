@@ -1,0 +1,123 @@
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-7">
+                <form [formGroup]="registerationForm" (ngSubmit)="onSubmit()" class="billing-form">
+                    <h3 class="mb-4 billing-heading">register</h3>
+                    <div class="row align-items-end">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="firstname">Firt Name</label>
+                                <input type="text" class="form-control" formControlName="firstName" required>
+                                <span class="text-danger" *ngFor="let validation of userValidationMessages.firstName">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('firstName').hasError(validation.type) && (registerationForm.get('firstName').dirty || registerationForm.get('firstName').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="lastname">Last Name</label>
+                                <input type="text" class="form-control" formControlName="lastName" required>
+                                <span class="text-danger" *ngFor="let validation of userValidationMessages.lastName">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('lastName').hasError(validation.type) && (registerationForm.get('lastName').dirty || registerationForm.get('lastName').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dob">BirthDay</label>
+                                <input type="date" class="form-control" formControlName="dob" placeholder="" required>
+                                <span class="text-danger" *ngFor="let validation of userValidationMessages.dob">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('dob').hasError(validation.type) && (registerationForm.get('dob').dirty || registerationForm.get('dob').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" class="form-control" formControlName="contact" required>
+                                <span class="text-danger" *ngFor="let validation of userValidationMessages.contact">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('contact').hasError(validation.type) && (registerationForm.get('contact').dirty || registerationForm.get('contact').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="emailaddress">Email Address</label>
+                                <input type="email" class="form-control" formControlName="email" required>
+                                <span class="text-danger" *ngFor="let validation of userValidationMessages.email">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('email').hasError(validation.type) && (registerationForm.get('email').dirty || registerationForm.get('email').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="streetaddress">Password</label>
+                                <input type="password" class="form-control" formControlName="password" required
+                                    (keyup)="getPassword(p.value)" #p>
+                                <span class="text-danger" *ngFor="let validation of userValidationMessages.password">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('password').hasError(validation.type) && (registerationForm.get('password').dirty || registerationForm.get('password').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="streetaddress">Confirm Password</label>
+                                <input type="password" class="form-control" formControlName="confirmPassword" required>
+                                <span class="text-danger"
+                                    *ngFor="let validation of userValidationMessages.confirmPassword">
+                                    <span class="text-danger"
+                                        *ngIf="registerationForm.get('confirmPassword').hasError(validation.type) && (registerationForm.get('confirmPassword').dirty || registerationForm.get('confirmPassword').touched)">
+                                        {{validation.message}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="" class="mr-2" formControlName="terms"
+                                            required> I hav
+                                        requirede
+                                        read and
+                                        accept the terms and conditions</label>
+                                    <span class="text-danger" *ngFor="let validation of userValidationMessages.terms">
+                                        <span class="text-danger"
+                                            *ngIf="registerationForm.get('terms').hasError(validation.type) && (registerationForm.get('terms').dirty || registerationForm.get('terms').touched)">
+                                            {{validation.message}}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary"
+                        [disabled]="!registerationForm.valid">Submit</button>
+                </form><!-- END -->
+            </div> <!-- .col-md-8 -->
+        </div>
+    </div>
+</section> <!-- .section -->
