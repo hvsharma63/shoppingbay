@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AlertDangerComponent } from './shared/alert-danger/alert-danger.component';
 import { AlertSuccessComponent } from './shared/alert-success/alert-success.component';
+import { ForgotPasswordComponent } from './password/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { AlertSuccessComponent } from './shared/alert-success/alert-success.comp
     RegisterComponent,
     LoginComponent,
     AlertDangerComponent,
-    AlertSuccessComponent
+    AlertSuccessComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

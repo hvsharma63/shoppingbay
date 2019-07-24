@@ -1,1 +1,51 @@
-<p>login works!</p>
+<app-alert-danger [error]="error" *ngIf="error"></app-alert-danger>
+<app-alert-success [success]="success" *ngIf="success"></app-alert-success>
+<section class="ftco-section">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-xl-3">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="billing-form">
+                    <div class="col-md-12">
+                        <h1>Login</h1>
+                    </div>
+                    <div class="col-xl-12 align-items-end">
+                        <div class="form-group">
+                            <label for="emailaddress">Email Address</label>
+                            <input type="email" class="form-control" formControlName="email" required>
+                            <span class="text-danger" *ngFor="let validation of loginValidationMessages.email">
+                                <span class="text-danger"
+                                    *ngIf="loginForm.get('email').hasError(validation.type) && (loginForm.get('email').dirty || loginForm.get('email').touched)">
+                                    {{validation.message}}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-xl-12 align-items-center">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" formControlName="password" required>
+                            <span class="text-danger" *ngFor="let validation of loginValidationMessages.password">
+                                <span class="text-danger"
+                                    *ngIf="loginForm.get('password').hasError(validation.type) && (loginForm.get('password').dirty || loginForm.get('password').touched)">
+                                    {{validation.message}}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 align-items-center">
+                        <a [routerLink]="['/forgotPassword']" class="py-2 d-block"
+                            style="color:black;text-decoration:none">Forgot Password?</a>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-xl-12 align-items-center">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-md btn-primary"
+                                [disabled]="!loginForm.valid">Submit</button>
+                        </div>
+                    </div>
+                </form><!-- END -->
+            </div>
+        </div>
+    </div>
+</section> <!-- .section -->

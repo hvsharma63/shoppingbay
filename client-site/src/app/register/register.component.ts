@@ -22,11 +22,13 @@ export class RegisterComponent implements OnInit {
       { type: 'required', message: '|| Required ' },
       { type: 'minlength', message: '|| Too short' },
       { type: 'maxlength', message: '|| Too long' },
+      { type: 'pattern', message: '|| Only Alphabets are allowed' }
     ],
     lastName: [
       { type: 'required', message: '|| Required ' },
       { type: 'minlength', message: '|| Too short' },
       { type: 'maxlength', message: '|| Too long' },
+      { type: 'pattern', message: '|| Only Alphabets are allowed' }
     ],
     email: [
       { type: 'required', message: '|| Required ' },
@@ -59,8 +61,10 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     console.log(this.todaysDate);
     this.registerationForm = new FormGroup({
-      firstName: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-      lastName: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      // tslint:disable-next-line: max-line-length
+      firstName: new FormControl(null, [Validators.required, Validators.pattern(/^[A-Za-z]+$/), Validators.minLength(3), Validators.maxLength(50)]),
+      // tslint:disable-next-line: max-line-length
+      lastName: new FormControl(null, [Validators.required, Validators.pattern(/^[A-Za-z]+$/), Validators.minLength(3), Validators.maxLength(50)]),
       dob: new FormControl(null, [Validators.required, this.validateDate.bind(this)]),
       email: new FormControl(null, [Validators.required, Validators.email]),
       // tslint:disable-next-line: max-line-length

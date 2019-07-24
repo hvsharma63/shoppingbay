@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -36,12 +36,13 @@ export class AuthenticationService {
     }
 
     public getUserDetails(): UserDetails {
+
         const token = this.getToken();
         let payload;
         if (token) {
             payload = token.split('.')[1];
             // console.log(payload);
-            payload = window.atob(payload);
+            payload = window.atob(payload); // Decodes the poayload
             // console.log(payload);
             return JSON.parse(payload);
         } else {
@@ -52,6 +53,8 @@ export class AuthenticationService {
     public isLoggedIn(): boolean {
         const user = this.getUserDetails();
         if (user) {
+            console.log(user.exp);
+
             // console.log(user.exp, Date.now() / 1000);
             // console.log(user.exp > Date.now() / 1000);
             return user.exp > Date.now() / 1000;
@@ -65,9 +68,7 @@ export class AuthenticationService {
     }
 
     public login(user: TokenPayload): Observable<any> {
-        const base = this.http.post('http://localhost:3500/users/login', user);
-        console.log(base);
-        // console.log(user);
+        const base = this.http.post('http://localhost:3500/users/user/login', user);
         const request = base.pipe(
             map((data: TokenResponse) => {
                 if (data.token) {
@@ -78,13 +79,17 @@ export class AuthenticationService {
         return request;
     }
 
+    public sendTokenToEmail(email: string): Observable<any> {
+        console.log(email);
+        return this.http.post(`http://localhost:3500/users/user/sendTokenToEmail`, email);
+    }
     public profile(): Observable<any> {
-        return this.http.get(`http://localhost:3500/users/profile`);
+        return this.http.get(`http://localhost:3500/users/user/profile`);
     }
 
     public logout(): void {
         this.token = ``;
         window.localStorage.removeItem('userToken');
-        this.router.navigate(['admin/login']);
+        this.router.navigate(['user/login']);
     }
 }
