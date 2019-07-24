@@ -12,15 +12,15 @@ process.env.SECRET_KEY = 'solution_analyst'
 
 // REGISTER
 users.post('/register', (req, res) => {
-
+    
     pool.query(`SELECT * from Users WHERE email = '${req.body.email}'`, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
             const hash = bcrypt.hashSync(req.body.password, 10);
             req.body.password = hash;
-            pool.query(`INSERT INTO Users(firstName, lastName, email, password, dob, profile, contact, role, createdAt)
+            pool.query(`INSERT INTO Users(firstName, lastName, email, password, dob, profile, contact, createdAt)
                         VALUES ('${req.body.firstName}', '${req.body.lastName}','${req.body.email}', '${req.body.password}', 
-                        '${req.body.dob}', '${req.body.profile}', ${req.body.contact},'${req.body.role}',CURDATE())`,
+                        '${req.body.dob}', '${req.body.profile}', ${req.body.contact},CURDATE())`,
                 (err, result) => {
                     if (err) res.status(500).send({ error: err })
                     if (result) {

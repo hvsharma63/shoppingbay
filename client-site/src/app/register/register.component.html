@@ -1,3 +1,5 @@
+<app-alert-danger [error]="error" *ngIf="error"></app-alert-danger>
+<app-alert-success [success]="success" *ngIf="success"></app-alert-success>
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
@@ -100,10 +102,7 @@
                             <div class="col-md-12">
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="" class="mr-2" formControlName="terms"
-                                            required> I hav
-                                        requirede
-                                        read and
-                                        accept the terms and conditions</label>
+                                            required> I have read and accept the terms and conditions</label><br>
                                     <span class="text-danger" *ngFor="let validation of userValidationMessages.terms">
                                         <span class="text-danger"
                                             *ngIf="registerationForm.get('terms').hasError(validation.type) && (registerationForm.get('terms').dirty || registerationForm.get('terms').touched)">

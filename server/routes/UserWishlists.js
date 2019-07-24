@@ -1,9 +1,5 @@
 const express = require('express')
 var cors = require('cors')
-const jwt = require('jsonwebtoken')
-const db = require('../models/index')
-const bcrypt = require('bcrypt');
-const UserWishlist = require('../models/UserWishlist')
 const userWishlist = express.Router()
 userWishlist.use(cors())
 

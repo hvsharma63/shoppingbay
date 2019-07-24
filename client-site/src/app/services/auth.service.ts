@@ -61,9 +61,7 @@ export class AuthenticationService {
     }
 
     public register(user): Observable<any> {
-        const registeredUser = this.http.post('http://localhost:3500/users/register', user);
-        // console.log(registeredUser);
-        return registeredUser;
+        return this.http.post('http://localhost:3500/users/register', user);
     }
 
     public login(user: TokenPayload): Observable<any> {

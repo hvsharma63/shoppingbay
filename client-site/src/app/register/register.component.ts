@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthenticationService } from '../services/auth.service';
-import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -12,69 +12,97 @@ import { Router } from '@angular/router';
 export class RegisterComponent implements OnInit {
 
   registerationForm: FormGroup;
-  password = '';
+  password: any;
   error: any;
-  success: string;
-  constructor(private auth: AuthenticationService, private router: Router) { }
+  success: any;
+  todaysDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+  constructor(private auth: AuthenticationService) { }
   userValidationMessages = {
     firstName: [
-      { type: 'required', message: 'Required' },
-      { type: 'minlength', message: 'Too short' },
-      { type: 'maxlength', message: 'Too long' },
+      { type: 'required', message: '|| Required ' },
+      { type: 'minlength', message: '|| Too short' },
+      { type: 'maxlength', message: '|| Too long' },
     ],
     lastName: [
-      { type: 'required', message: 'Required' },
-      { type: 'minlength', message: 'Too short' },
-      { type: 'maxlength', message: 'Too long' },
+      { type: 'required', message: '|| Required ' },
+      { type: 'minlength', message: '|| Too short' },
+      { type: 'maxlength', message: '|| Too long' },
     ],
     email: [
-      { type: 'required', message: 'Required' },
-      { type: 'email', message: 'Enter a proper E-mail' },
+      { type: 'required', message: '|| Required ' },
+      { type: 'email', message: '|| Enter a proper E-mail' },
     ],
     dob: [
-      { type: 'required', message: 'Required' }
+      { type: 'required', message: '|| Required ' },
+      { type: 'match', message: '|| Date cannot be ahead of today' }
     ],
     contact: [
-      { type: 'required', message: 'Required' },
-      { type: 'pattern', message: 'Should be Number' },
-      { type: 'minlength', message: 'least 10 nums' }
+      { type: 'required', message: '|| Required ' },
+      { type: 'pattern', message: '|| Should be Number' },
+      { type: 'minlength', message: '|| least 10 nums' },
+      { type: 'maxlength', message: '|| max 13 nums' }
     ],
     password: [
-      { type: 'required', message: 'Required' }
+      { type: 'required', message: '|| Required ' },
+      { type: 'caps', message: '|| Must have at-least 1 capital letter ' },
+      { type: 'nums', message: '|| Must have at-least 1 number ' },
+      { type: 'specs', message: '|| Must have at-least 1 special character ' }
     ],
     confirmPassword: [
-      { type: 'required', message: 'Required' },
-      { type: 'match', message: 'Password mismatch' }
+      { type: 'required', message: '|| Required ' },
+      { type: 'match', message: '|| Password mismatch' }
     ],
     terms: [
-      { type: 'required', message: 'You must accept terms and conditions' }
+      { type: 'required', message: '|| You must accept terms and conditions' }
     ]
   };
   ngOnInit() {
+    console.log(this.todaysDate);
     this.registerationForm = new FormGroup({
       firstName: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
       lastName: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-      dob: new FormControl(null, [Validators.required]),
+      dob: new FormControl(null, [Validators.required, this.validateDate.bind(this)]),
       email: new FormControl(null, [Validators.required, Validators.email]),
-      contact: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
-      password: new FormControl(null, [Validators.required]),
+      // tslint:disable-next-line: max-line-length
+      contact: new FormControl(null, [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
+      password: new FormControl(null, [Validators.required, this.validatePassword.bind(this)]),
       confirmPassword: new FormControl(null, [Validators.required, this.checkPassword.bind(this)]),
       terms: new FormControl(null, [Validators.required]),
     });
   }
-
-  checkPassword(control: FormControl): { [s: string]: boolean } {
-    console.log(control, this.password);
-
-    if (control.value !== this.password) {
-      return { match: false };
+  validateDate(control: FormControl): { [s: string]: boolean } {
+    if (control.value > this.todaysDate) {
+      return { match: true };
+    } else {
+      return null;
     }
-    return null;
   }
+  validatePassword(control: FormControl): { [s: string]: boolean } {
+    const capReg = new RegExp(/^(.*[A-Z]+.*)$/);
+    const numReg = new RegExp(/^(.*[0-9]+.*)$/);
+    const speReg = new RegExp(/^(.*[@#$%^&+*!=]+.*)$/);
 
+
+    if (!capReg.test(control.value)) {
+      return { caps: true };
+    }
+    if (!numReg.test(control.value)) {
+      return { nums: true };
+    }
+    if (!speReg.test(control.value)) {
+      return { specs: true };
+    }
+  }
+  checkPassword(control: FormControl): { [s: string]: boolean } {
+    if (control.value !== this.password) {
+      return { match: true };
+    } else {
+      return null;
+    }
+  }
   getPassword(password: string) {
-    this.registerationForm.get('confirmPassword').patchValue(null);
     this.password = password;
+    this.registerationForm.get('confirmPassword').setValue(null);
   }
 
   onSubmit() {
@@ -85,10 +113,14 @@ export class RegisterComponent implements OnInit {
     // console.log(this.registerationForm.value);
 
     this.auth.register(this.registerationForm.value)
-      .subscribe((response) => {
-        console.log(response);
-        this.success = 'Registered Successfully';
-      }
+      .subscribe(
+        (response) => {
+          this.success = 'Registered Successfully';
+        },
+        (err) => {
+          console.log(err);
+          this.error = err.error.message;
+        }
       );
   }
 }
