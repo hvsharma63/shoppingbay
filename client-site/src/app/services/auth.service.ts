@@ -65,11 +65,11 @@ export class AuthenticationService {
     }
 
     public register(user): Observable<any> {
-        return this.http.post('http://localhost:3500/users/register', user);
+        return this.http.post('/users/register', user);
     }
 
     public login(user: TokenPayload): Observable<any> {
-        const base = this.http.post('http://localhost:3500/users/user/login', user);
+        const base = this.http.post('/users/user/login', user);
         const request = base.pipe(
             map((data: TokenResponse) => {
                 if (data.token) {
@@ -82,19 +82,19 @@ export class AuthenticationService {
 
     public sendTokenToEmail(email: string): Observable<any> {
         console.log(email);
-        return this.http.post(`http://localhost:3500/users/user/sendTokenToEmail`, email);
+        return this.http.post(`/users/user/sendTokenToEmail`, email);
     }
 
     public checkTokenValidity(id: number, passwordToken: string): Observable<any> {
-        return this.http.post(`http://localhost:3500/users/user/checkIfTokenExists`, { id, passwordToken });
+        return this.http.post(`/users/user/checkIfTokenExists`, { id, passwordToken });
     }
 
     public profile(): Observable<any> {
-        return this.http.get(`http://localhost:3500/users/user/profile`);
+        return this.http.get(`/users/user/profile`);
     }
 
     public resetPassword(userId: number, email: string, password: string): Observable<any> {
-        return this.http.post(`http://localhost:3500/users/user/resetPassword`, { userId, password, email });
+        return this.http.post(`/users/user/resetPassword`, { userId, password, email });
     }
     public logout(): void {
         this.token = ``;
