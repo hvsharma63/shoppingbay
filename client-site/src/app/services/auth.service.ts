@@ -21,6 +21,7 @@ export interface TokenPayload {
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     private token: string;
+    payload: string;
     constructor(private http: HttpClient, private router: Router) { }
 
     private saveToken(token: string): void {
@@ -83,10 +84,18 @@ export class AuthenticationService {
         console.log(email);
         return this.http.post(`http://localhost:3500/users/user/sendTokenToEmail`, email);
     }
+
+    public checkTokenValidity(id: number, passwordToken: string): Observable<any> {
+        return this.http.post(`http://localhost:3500/users/user/checkIfTokenExists`, { id, passwordToken });
+    }
+
     public profile(): Observable<any> {
         return this.http.get(`http://localhost:3500/users/user/profile`);
     }
 
+    public resetPassword(userId: number, email: string, password: string): Observable<any> {
+        return this.http.post(`http://localhost:3500/users/user/resetPassword`, { userId, password, email });
+    }
     public logout(): void {
         this.token = ``;
         window.localStorage.removeItem('userToken');

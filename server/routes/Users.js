@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
     requireTLS: true,
     auth: {
         user: 'harshvardhan.sharma.sa@gmail.com',
-        pass: '*********'
+        pass: 'hGjht6CSGsuU'
     }
 });
 users.use(cors())
@@ -26,21 +26,21 @@ process.env.SECRET_KEY = 'solution_analyst'
 // REGISTER {{ Common }}
 users.post('/register', (req, res) => {
 
-    if (validator.matches(req.body.firstName, /^[A-Za-z]+$/) === false ||
-        validator.isLength(req.body.firstName, [{ min: 3, max: 50 }] === false)) {
+    if (!validator.matches(req.body.firstName, /^[A-Za-z]+$/) ||
+        !validator.isLength(req.body.firstName, [{ min: 3, max: 50 }])) {
         return res.status(500).send({ message: "Something is wrong with firstname" })
     }
-    if (validator.matches(req.body.firstName, /^[A-Za-z]+$/) === false ||
-        validator.isLength(req.body.firstName, [{ min: 3, max: 50 }] === false)) {
+    if (!validator.matches(req.body.firstName, /^[A-Za-z]+$/) ||
+        !validator.isLength(req.body.firstName, [{ min: 3, max: 50 }])) {
         return res.status(500).send({ message: "Something is wrong with lastname" })
     }
-    if (validator.isEmail(req.body.email) === false) {
+    if (!validator.isEmail(req.body.email)) {
         return res.status(500).send({ message: "Kindly check the email" })
     }
-    if (validator.isLength(req.body.contact, [{ min: 10, max: 13 }] === false)) {
+    if (!validator.isLength(req.body.contact, [{ min: 10, max: 13 }])) {
         return res.status(500).send({ message: "Kindly check the email" })
     }
-    if (validator.matches(req.body.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+*!=]).*$/) === false) {
+    if (!validator.matches(req.body.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+*!=]).*$/)) {
         return res.status(500).send({ message: "password does not match the criteria" })
     }
     pool.query(`SELECT * from Users WHERE email = '${req.body.email}'`, (err, result) => {
@@ -136,7 +136,6 @@ users.post('/user/sendTokenToEmail', (req, res) => {
     if (validator.isEmail(req.body.email) === false) {
         return res.status(500).send({ message: "Kindly check the email" })
     }
-    console.log(req.body);
     pool.query(`SELECT * from Users WHERE email ='${req.body.email}'`, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
@@ -150,22 +149,26 @@ users.post('/user/sendTokenToEmail', (req, res) => {
             let token = jwt.sign(payload, secret, {
                 expiresIn: 3600
             })
-            pool.query(`UPDATE Users SET resetTokenSecret='${secret}', resetToken='${token}' WHERE id = ${payload.id};`, (err, result) => {
+            pool.query(`UPDATE Users SET resetToken='${token}' WHERE id = ${payload.id};`, (err, result) => {
                 if (err) res.status(500).send({ error: err })
                 if (!(result.length == 0)) {
                     link = '<a href="http://localhost:4200/resetPassword/' + payload.id + '/' + token + '">Reset password</a>';
+                    console.log(link);
                     const mailOptions = {
-                        from: 'harshvardhan.sharma@solutionanalysts.com', // sender address
-                        to: 'jimitraval@yahoo.com', // list of receivers
+                        from: 'harshvardhan.sharma.sa@gmail.com', // sender address
+                        to: req.body.email, // list of receivers
                         subject: 'Password Recent Link', // Subject line
                         html: link
                     };
 
                     transporter.sendMail(mailOptions, function (err, info) {
                         if (err)
-                            console.log(err)
-                        else
+                            res.status(500).send({ error: err })
+                        else {
+                            console.log(info);
+
                             res.status(200).send({ message: "Password Link has been sent to your email ID. Kindly check it" })
+                        }
                     });
                 }
             });
@@ -175,8 +178,29 @@ users.post('/user/sendTokenToEmail', (req, res) => {
     });
 })
 
+// Check if token Exists
+users.post('/user/checkIfTokenExists', (req, res) => {
+    console.log(req.body);
+    pool.query(`SELECT * from Users WHERE id='${req.body.id}' AND resetToken='${req.body.passwordToken}'`, (err, result) => {
+        if (err) res.status(500).send({ error: err })
+        if (result.length == 0) {
+            console.log(result);
+            res.status(500).send({ isValid: false, message: 'Token Expired' })
+        } else {
+            console.log(result);
+            const decoded = jwt.decode(req.body.passwordToken, result[0].resetTokenSecret)
+            console.log(decoded.exp > (Date.now() / 1000));
+            if (decoded.exp > (Date.now() / 1000)) {
+                res.status(200).send({ isValid: true, email: decoded.email });
+            } else {
+                res.status(500).send({ isValid: false, message: 'Token Expired' });
+            }
+        }
+    });
+})
+
 // Change Password {{ USER }}
-users.post('user/changePassword', auth, (req, res) => {
+users.post('/user/changePassword', auth, (req, res) => {
     pool.query(`SELECT * from Users WHERE id = ${req.body.id}`, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
@@ -196,4 +220,29 @@ users.post('user/changePassword', auth, (req, res) => {
     });
 })
 
+// RESET Password {{ USER }}
+users.post('/user/resetPassword', (req, res) => {
+    console.log(req.body);
+    if (validator.isEmail(req.body.email) === false) {
+        return res.status(500).send({ message: "There must be something wrong with email" })
+    }
+    if (validator.matches(req.body.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+*!=]).*$/) === false) {
+        return res.status(500).send({ message: "password does not match the criteria" })
+    }
+    pool.query(`SELECT * from Users WHERE id ='${req.body.userId}' AND email ='${req.body.email}'`, (err, result) => {
+        if (err) res.status(500).send({ error: err })
+        if (result.length == 0) {
+            res.status(500).send({ message: 'No User Found by this Id AND Email' })
+        } else {
+            const hash = bcrypt.hashSync(req.body.password, 10);
+            req.body.password = hash;
+            pool.query(`UPDATE Users SET resetToken=null, resetTokenSecret=null, password='${req.body.password}' WHERE id = ${req.body.userId};`, (err, result) => {
+                if (err) { res.status(500).send({ error: err }) }
+                else
+                    res.status(200).send({ message: 'Password changed successfully' })
+            })
+        }
+    });
+})
+// GET User By ID {{ USER }}
 module.exports = users;
