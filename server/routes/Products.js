@@ -37,8 +37,9 @@ const upload = multer({
 products.use(cors())
 
 process.env.SECRET_KEY = 'solution_analyst'
-// Retrieve all products
-products.get('', auth, (req, res) => {
+// Retrieve all products {{ ADMIN}}
+products.get('/', (req, res) => {
+    console.log(req.query);
     pool.query(`SELECT *, Categories.name as category FROM Categories RIGHT JOIN Products ON Categories.id = Products.categoryId`, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
@@ -48,6 +49,7 @@ products.get('', auth, (req, res) => {
         }
     });
 })
+
 
 // Get all product names,id
 products.get('/allProductNames', auth, (req, res) => {

@@ -12,6 +12,9 @@ import { AlertDangerComponent } from './shared/alert-danger/alert-danger.compone
 import { AlertSuccessComponent } from './shared/alert-success/alert-success.component';
 import { ForgotPasswordComponent } from './password/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { HomeContentComponent } from './home/home-content/home-content.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { ResetPasswordComponent } from './password/reset-password/reset-password
     AlertDangerComponent,
     AlertSuccessComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    HeaderComponent,
+    FooterComponent,
+    HomeContentComponent
   ],
   imports: [
     BrowserModule,
