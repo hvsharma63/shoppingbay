@@ -8,7 +8,6 @@ import { Subject } from 'rxjs';
   styleUrls: ['./product-index.component.css']
 })
 export class ProductIndexComponent implements OnInit, OnDestroy {
-  dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   error: any;
   success: string;
@@ -16,10 +15,7 @@ export class ProductIndexComponent implements OnInit, OnDestroy {
 
   products = [];
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5
-    };
+
     this.productService.getAllProducts().subscribe(products => {
       this.products = products;
       this.dtTrigger.next();

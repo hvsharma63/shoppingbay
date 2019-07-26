@@ -37,10 +37,10 @@ const upload = multer({
 products.use(cors())
 
 process.env.SECRET_KEY = 'solution_analyst'
-// Retrieve all products {{ ADMIN}}
-products.get('/', (req, res) => {
+// Retrieve all products {{ ADMIN }}
+products.get('/', auth, (req, res) => {
     console.log(req.query);
-    pool.query(`SELECT *, Categories.name as category FROM Categories RIGHT JOIN Products ON Categories.id = Products.categoryId`, (err, result) => {
+    pool.query(`SELECT Products.*, Deals.*, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id;`, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
             res.status(200).send({ message: 'No products found.' })
@@ -50,6 +50,22 @@ products.get('/', (req, res) => {
     });
 })
 
+// GET Searched Products
+products.get('/search', (req, res) => {
+    console.log("called from params");
+    console.log(req.query.products);
+    pool.query(`SELECT *, Categories.name as category FROM Categories 
+                RIGHT JOIN Products ON Categories.id = Products.categoryId
+                WHERE Products.name LIKE '%${req.query.products}%';
+                `, (err, result) => {
+            if (err) res.status(500).send({ error: err })
+            if (result.length == 0) {
+                res.status(200).send({ message: 'No products found.' })
+            } else {
+                res.status(200).send(result)
+            }
+        });
+})
 
 // Get all product names,id
 products.get('/allProductNames', auth, (req, res) => {
@@ -74,44 +90,78 @@ products.get('/ratings', auth, (req, res) => {
             res.status(200).send(result)
         }
     });
-})
-// Create product
-products.post('/create', upload.single('productImage'), auth, (req, res, next) => {
-    console.log(req.body);
-    console.log(req.file);
 
-    const file = req.file
-    const filePath = req.protocol + '://' + req.get("host") + '/' + req.file.path;
+})
+
+
+// Create product
+products.post('/create', upload.single('productImage'), auth, async (req, res, next) => {
+    console.log("some");
+    const file = req.file;
+    console.log(req.body);
+    skipDiscount = false;
+    const filePath = req.protocol + '://' + 'localhost:3500' + '/' + req.file.path;
     if (!file) {
         const error = new Error('Please upload a file')
         error.httpStatusCode = 400
         return next(error)
     }
+    if (req.body.stock > 0) {
+        req.body.stockAvailability = true;
+    } else {
+        req.body.stockAvailability = false;
+    }
+    if (req.body.startDate == '' || req.body.endDate == '' || req.body.discount == '') {
+        req.body.startDate = null;
+        req.body.endDate = null;
+        req.body.discount = null;
+        skipDiscount = true;
+    }
+    try {
+        const productSearch = await pool.execute(`SELECT * from Products WHERE name = '${req.body.name}'`);
+        if (productSearch[0].length == 0) {
+            const productInsert = await pool.execute(`INSERT INTO Products (categoryId, name, description, price, sku, imagePath, createdAt, stock, stockAvailability)
+                    VALUES ('${req.body.categoryId}', '${req.body.name}', '${req.body.description}',${req.body.price},
+                    '${req.body.sku}','${filePath}', CURDATE(), ${req.body.stock}, ${req.body.stockAvailability})`);
+            if (productInsert) {
+                console.log(productInsert[0].insertId);
+                if (!skipDiscount) {
+                    console.log('inside skip discount');
 
-    pool.query(`SELECT * from Products WHERE name = '${req.body.name}'`, (err, result) => {
-        if (err) res.status(500).send({ error: err })
-        if (result.length == 0) {
+                    const dealInsert = await pool.execute(`INSERT INTO Deals (productId, discount, startDate, endDate, createdAt) VALUES ( ${productInsert[0].insertId}, ${req.body.discount}, '${req.body.startDate}', '${req.body.endDate}', CURDATE())`);
+                    console.log(dealInsert[0]);
+                    if (dealInsert) {
+                        console.log('inside deal insert');
 
-            pool.query(`INSERT INTO Products (categoryId, name, description, price, sku, imagePath, createdAt, stock, stockAvailability)
-            VALUES ('${req.body.categoryId}', '${req.body.name}', '${req.body.description}',${req.body.price},
-            '${req.body.sku}','${filePath}', CURDATE(), ${req.body.stock}, ${req.body.stockAvailability})`,
-                (err, result) => {
-                    if (err) res.status(500).send({ error: err })
-                    if (result) {
-                        res.status(200).send(result);
+                        return res.status(200).send({
+                            success: 'true',
+                            message: "Product & Deal Created Successfully",
+                            product: productInsert,
+                            deal: dealInsert
+                        });
                     }
                 }
-            )
-        } else {
-            res.status(400).send({ message: 'This product already exists' })
+                return res.status(200).send({
+                    success: 'true',
+                    message: "Product Created Successfully",
+                    product: productInsert,
+                });
+            }
         }
-    });
+    } catch (error) {
+        res.send({ error: error })
+    }
 })
 
 // Get specific product
-products.get('/:id', auth, (req, res) => {
+products.get('/:id', auth, async (req, res) => {
     console.log("called from get id");
-
+    // try {
+    //     const productSearch = await pool.execute('SELECT * FROM Products LEFT JOIN Deals ON Products.id = Deals.productId');
+    //     res.send(productSearch);
+    // } catch (error) {
+    //     res.send(error)
+    // }
     pool.query(`SELECT * from Products WHERE id = ${req.params.id}`, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
@@ -168,4 +218,6 @@ products.delete('/:id/rating/delete', auth, (req, res) => {
         }
     )
 })
+
+
 module.exports = products;

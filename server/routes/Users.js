@@ -226,7 +226,7 @@ users.post('/user/resetPassword', (req, res) => {
     if (validator.isEmail(req.body.email) === false) {
         return res.status(500).send({ message: "There must be something wrong with email" })
     }
-    if (validator.matches(req.body.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+*!=]).*$/) === false) {
+    if (validator.matches(req.body.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])1.*$/) === false) {
         return res.status(500).send({ message: "password does not match the criteria" })
     }
     pool.query(`SELECT * from Users WHERE id ='${req.body.userId}' AND email ='${req.body.email}'`, (err, result) => {

@@ -1,4 +1,22 @@
 <div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mb-4 alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>{{error}}</strong>
+            </div>
+            <div class="mb-4 alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>{{success}}</strong>
+            </div>
+        </div>
+    </div>
     <div class="row mt-4">
         <div class="col-md-12 stretch-card">
             <div class="card">

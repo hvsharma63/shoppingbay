@@ -8,8 +8,10 @@ import { Subject } from 'rxjs';
   styleUrls: ['./product-ratings-index.component.css']
 })
 export class ProductRatingsIndexComponent implements OnInit, OnDestroy {
+  success: string;
 
   constructor(private productService: ProductsService) { }
+
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   ratings = [];
@@ -27,7 +29,7 @@ export class ProductRatingsIndexComponent implements OnInit, OnDestroy {
     const decision = confirm('Are you sure you want to delete?');
     if (decision) {
       this.productService.deleteProductsRating(id).subscribe(res => {
-        console.log(res);
+        this.success = 'Ratings Deleted Successfully';
       });
     } else {
       console.log('Nothing has changed');

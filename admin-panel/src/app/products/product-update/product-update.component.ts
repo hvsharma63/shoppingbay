@@ -13,6 +13,8 @@ export class ProductUpdateComponent implements OnInit {
   error: string;
   productId: any;
   success: string;
+  startDate: string;
+  endDate: string;
 
   constructor(private productService: ProductsService, private catService: CategoriesService,
     // tslint:disable-next-line: align
@@ -45,8 +47,17 @@ export class ProductUpdateComponent implements OnInit {
       { type: 'required', message: 'required' },
       { type: 'pattern', message: 'Should be Number' },
     ],
-    stockAvailability: [
-      { type: 'required', message: 'required' }
+    startDate: [
+      { type: 'required', message: 'Required' },
+      { type: 'match', message: 'Start Date cannot be ahead of End Date' },
+    ],
+    endDate: [
+      { type: 'required', message: 'Required' },
+      { type: 'match', message: 'End Date cannot be in advance of Start Date' },
+    ],
+    discount: [
+      { type: 'required', message: 'required' },
+      { type: 'pattern', message: 'Should be Number' }
     ],
   };
   updateProduct: FormGroup;
@@ -61,7 +72,9 @@ export class ProductUpdateComponent implements OnInit {
       imagePath: new FormControl(null),
       price: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
       stock: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
-      stockAvailability: new FormControl(null, Validators.required),
+      startDate: new FormControl(null, [Validators.required, this.validateStartDate.bind(this)]),
+      endDate: new FormControl(null, [Validators.required, this.validateEndDate.bind(this)]),
+      discount: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
     });
     this.catService.getCategoriesByName().subscribe(categories => {
       this.categories = categories;
@@ -84,7 +97,27 @@ export class ProductUpdateComponent implements OnInit {
       });
     });
   }
+  getStartDate(date: string) {
+    this.startDate = date;
+  }
 
+  getEndDate(date: string) {
+    this.endDate = date;
+  }
+
+  validateStartDate(control: FormControl): { [s: string]: boolean } {
+    if (control.value > this.endDate) {
+      return { match: true };
+    }
+    return null;
+  }
+
+  validateEndDate(control: FormControl): { [s: string]: boolean } {
+    if (control.value < this.startDate) {
+      return { match: true };
+    }
+    return null;
+  }
   onSubmit() {
     if (this.updateProduct.invalid) {
       return this.error = 'Must fill all values';

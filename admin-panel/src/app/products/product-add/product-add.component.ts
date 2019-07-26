@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProductsService } from 'src/app/services/products.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-add',
@@ -9,11 +10,14 @@ import { ProductsService } from 'src/app/services/products.service';
   styleUrls: ['./product-add.component.css']
 })
 export class ProductAddComponent implements OnInit {
+  endDate: string;
 
-  constructor(private catService: CategoriesService, private productService: ProductsService) { }
+  constructor(private catService: CategoriesService, private productService: ProductsService, private router: Router) { }
+  isProductInDeal = false;
   selectedFile: File;
   error = null;
   success = null;
+  startDate = null;
   newProduct: FormGroup;
   productValidationMessages = {
     name: [
@@ -43,8 +47,14 @@ export class ProductAddComponent implements OnInit {
       { type: 'required', message: 'required' },
       { type: 'pattern', message: 'Should be Decimal Number' },
     ],
-    stockAvailability: [
-      { type: 'required', message: 'required' }
+    startDate: [
+      { type: 'match', message: 'Start Date cannot be ahead of End Date' },
+    ],
+    endDate: [
+      { type: 'match', message: 'End Date cannot be in advance of Start Date' },
+    ],
+    discount: [
+      { type: 'pattern', message: 'Should be Number' }
     ],
   };
   categories = [];
@@ -57,7 +67,9 @@ export class ProductAddComponent implements OnInit {
       imagePath: new FormControl(null, Validators.required),
       price: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
       stock: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
-      stockAvailability: new FormControl(null, Validators.required),
+      startDate: new FormControl(null, [this.validateStartDate.bind(this)]),
+      endDate: new FormControl(null, [this.validateEndDate.bind(this)]),
+      discount: new FormControl(null, [Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
     });
     this.catService.getCategoriesByName().subscribe(categories => {
       this.categories = categories;
@@ -69,8 +81,21 @@ export class ProductAddComponent implements OnInit {
     if (this.newProduct.invalid) {
       return this.error = 'Must fill all values';
     }
-    console.log(this.newProduct.value);
+    console.log(this.newProduct.get('startDate').value == null);
+    console.log(this.newProduct.get('endDate').value == null);
+    console.log(this.newProduct.get('discount').value == null);
     const uploadData = new FormData();
+    //   if (this.newProduct.get('startDate').value == null ||
+    //   this.newProduct.get('endDate').value == null ||
+    //   this.newProduct.get('discount').value == null) {
+    //   console.log(this.newProduct.get('startDate').value == null);
+    //   console.log(this.newProduct.get('endDate').value == null);
+    //   console.log(this.newProduct.get('discount').value == null);
+
+    //   uploadData.append('startDate', null);
+    //   uploadData.append('endDate', null);
+    //   uploadData.append('discount', null);
+    // }
     uploadData.append('productImage', this.selectedFile, this.selectedFile.name);
     uploadData.append('name', this.newProduct.get('name').value);
     uploadData.append('categoryId', this.newProduct.get('categoryId').value);
@@ -78,22 +103,43 @@ export class ProductAddComponent implements OnInit {
     uploadData.append('sku', this.newProduct.get('sku').value);
     uploadData.append('price', this.newProduct.get('price').value);
     uploadData.append('stock', this.newProduct.get('stock').value);
-    uploadData.append('stockAvailability', this.newProduct.get('stockAvailability').value);
-
+    uploadData.append('startDate', this.newProduct.get('startDate').value);
+    uploadData.append('endDate', this.newProduct.get('endDate').value);
+    uploadData.append('discount', this.newProduct.get('discount').value);
     this.productService.createProduct(uploadData).subscribe(res => {
-      this.success = 'Product added Successfully';
-    },
-      err => {
-        console.log(err);
-        if (err.message.includes('Unknown')) {
-          this.error = 'Something went wrong';
-        } else {
-          this.error = err.error.message;
-        }
+      console.log(res);
+      this.success = res.message;
+    }, err => {
+      console.log(err);
+      if (err.message.includes('Unknown')) {
+        this.error = 'Something went wrong';
+      } else {
+        this.error = err.error.message;
       }
+    }
     );
   }
+  getStartDate(date: string) {
+    this.startDate = date;
+  }
 
+  getEndDate(date: string) {
+    this.endDate = date;
+  }
+
+  validateStartDate(control: FormControl): { [s: string]: boolean } {
+    if (control.value > this.endDate) {
+      return { match: true };
+    }
+    return null;
+  }
+
+  validateEndDate(control: FormControl): { [s: string]: boolean } {
+    if (control.value < this.startDate) {
+      return { match: true };
+    }
+    return null;
+  }
   onFileChanged(event) {
     this.selectedFile = event.target.files[0];
     console.log(this.selectedFile);

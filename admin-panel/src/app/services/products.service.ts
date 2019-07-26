@@ -18,10 +18,6 @@ export class ProductsService {
     }
 
     public createProduct(product: FormData): Observable<any> {
-        // tslint:disable-next-line: forin
-        for (const key in product) {
-            console.log(key, product[key]);
-        }
         return this.http.post('/api/products/create', product);
     }
 

@@ -102,7 +102,8 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Uploaded Product Image</label>
                                     <div class="col-sm-9 mt-3">
-                                        <img src="{{productImage}}" class="img-fluid" alt="" required>
+                                        <img src="{{productImage}}" class="img-fluid" style="width:250px" alt=""
+                                            required>
                                         <input type="hidden" formControlName="imagePath">
                                     </div>
                                 </div>
@@ -139,35 +140,53 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Stock Availablity</label>
-                                    <div class="col-sm-4 mt-2">
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input type="radio" class="form-check-input"
-                                                    formControlName="stockAvailability" value="yes">
-                                                Yes
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-5 mt-2">
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input type="radio" class="form-check-input"
-                                                    formControlName="stockAvailability" value="no">
-                                                No
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <span class="text-danger"
-                                        *ngFor="let validation of productValidationMessages.stockAvailability">
+                                    <label class="col-sm-3 col-form-label">Discount</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" formControlName="discount" required />
                                         <span class="text-danger"
-                                            *ngIf="updateProduct.get('stockAvailability').hasError(validation.type) && (updateProduct.get('stockAvailability').dirty || updateProduct.get('stockAvailability').touched)">
-                                            {{validation.message}}
+                                            *ngFor="let validation of productValidationMessages.discount">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('discount').hasError(validation.type) && (updateProduct.get('discount').dirty || updateProduct.get('discount').touched)">
+                                                {{validation.message}}
+                                            </span>
                                         </span>
-                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Start Date</label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" formControlName="startDate" required
+                                            (input)="getStartDate($event.target.value)" />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.startDate">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('startDate').hasError(validation.type) && (updateProduct.get('startDate').dirty || updateProduct.get('startDate').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">End Date</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="date" formControlName="endDate" required
+                                            (input)="getEndDate($event.target.value)" />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.endDate">
+                                            <span class="text-danger"
+                                                *ngIf="updateProduct.get('endDate').hasError(validation.type) && (updateProduct.get('endDate').dirty || updateProduct.get('endDate').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

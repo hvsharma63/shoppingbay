@@ -136,6 +136,55 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Start Date</label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" formControlName="startDate"
+                                            (input)="getStartDate($event.target.value)" />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.startDate">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('startDate').hasError(validation.type) && (newProduct.get('startDate').dirty || newProduct.get('startDate').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">End Date</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="date" formControlName="endDate"
+                                            (input)="getEndDate($event.target.value)" />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.endDate">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('endDate').hasError(validation.type) && (newProduct.get('endDate').dirty || newProduct.get('endDate').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Discount</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" formControlName="discount" />
+                                        <span class="text-danger"
+                                            *ngFor="let validation of productValidationMessages.discount">
+                                            <span class="text-danger"
+                                                *ngIf="newProduct.get('discount').hasError(validation.type) && (newProduct.get('discount').dirty || newProduct.get('discount').touched)">
+                                                {{validation.message}}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Stock</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" formControlName="stock" required />
@@ -147,39 +196,6 @@
                                             </span>
                                         </span>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Stock Availablity</label>
-                                    <div class="col-sm-4 mt-2">
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input type="radio" class="form-check-input"
-                                                    formControlName="stockAvailability" name="stockAvailability"
-                                                    value="true" required>
-                                                Yes
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-5 mt-2">
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input type="radio" class="form-check-input"
-                                                    formControlName="stockAvailability" name="stockAvailability"
-                                                    value="false" required>
-                                                No
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <span class="text-danger"
-                                        *ngFor="let validation of productValidationMessages.stockAvailability">
-                                        <span class="text-danger"
-                                            *ngIf="newProduct.get('stockAvailability').hasError(validation.type) && (newProduct.get('stockAvailability').dirty || newProduct.get('stockAvailability').touched)">
-                                            {{validation.message}}
-                                        </span>
-                                    </span>
                                 </div>
                             </div>
                         </div>

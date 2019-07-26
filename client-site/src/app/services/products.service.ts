@@ -1,8 +1,16 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+
+
 @Injectable({
     providedIn: 'root'
 })
 export class ProductService {
-    constructor() { }
+    constructor(private http: HttpClient) { }
+
+    searchEntries(term): Observable<any> {
+        return this.http.get('/api/products/search?products=' + term);
+    }
 
 }
