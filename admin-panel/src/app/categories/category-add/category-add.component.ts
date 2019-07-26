@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CategoriesService } from 'src/app/services/categories.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-add',
@@ -8,7 +9,7 @@ import { CategoriesService } from 'src/app/services/categories.service';
   styleUrls: ['./category-add.component.css']
 })
 export class CategoryAddComponent implements OnInit {
-  constructor(private catService: CategoriesService) { }
+  constructor(private catService: CategoriesService, private router: Router) { }
   selectedFile: File;
   error = null;
   success = null;

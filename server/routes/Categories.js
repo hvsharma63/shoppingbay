@@ -54,8 +54,14 @@ categories.get('/names', auth, (req, res) => {
 })
 
 // Retrieve all categories
-categories.get('', auth, (req, res) => {
-    pool.query(`SELECT * from Categories`, (err, result) => {
+categories.get('', (req, res) => {
+    console.log(req.query);
+    if (Object.entries(req.query).length === 0) {
+        query = `SELECT * from Categories`;
+    } else if (req.query.hasOwnProperty('latest')) {
+        query = `SELECT * from Categories ORDER BY createdAt DESC LIMIT 6`
+    }
+    pool.query(query, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
             res.status(200).send({ message: 'No Categories found.' })
@@ -67,8 +73,9 @@ categories.get('', auth, (req, res) => {
 
 // Create category
 categories.post('/create', upload.single('categoryImage'), auth, (req, res, next) => {
+    req.body.description = validator.escape(req.body.description)
     const file = req.file
-    const filePath = req.protocol + '://' + req.get("host") + '/' + req.file.path;
+    const filePath = req.protocol + '://' + 'localhost:3500' + '/' + req.file.path;
     if (!file) {
         const error = new Error('Please upload a file')
         error.httpStatusCode = 400

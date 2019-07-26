@@ -12,8 +12,7 @@ import { FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./categories.component.css']
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
-  dtOptions: DataTables.Settings = {};
-  categories: object;
+  categories;
   dtTrigger = new Subject();
   categoryId = null;
   updateForm: FormGroup;
@@ -22,16 +21,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   success: string;
   constructor(private catService: CategoriesService) { }
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5
-    };
-    this.catService.getAllCategories()
-      .subscribe(categories => {
-        this.categories = categories;
-        this.dtTrigger.next();
-      });
 
+    this.getAllCategories();
     this.updateForm = new FormGroup({
       id: new FormControl(null),
       name: new FormControl(null),
@@ -40,7 +31,13 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  getAllCategories() {
+    this.catService.getAllCategories()
+      .subscribe(categories => {
+        this.categories = categories;
+        this.dtTrigger.next();
+      });
+  }
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
@@ -64,18 +61,19 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     }
     this.catService.updateCategory(this.categoryId, this.updateForm.value).subscribe(res => {
       this.success = 'Category Updated Successfully';
+      this.getAllCategories();
     }, err => {
       this.error = err.error.error.sqlMessage;
     });
     console.log('form updated');
   }
 
-  deleteCategory(id: number) {
+  deleteCategory(id: number, index: number) {
+    this.categories.splice(index, 1);
     const decision = confirm('Are you sure you want to delete?');
     if (decision) {
       this.catService.deleteCategory(id).subscribe(res => {
         this.success = 'Category Deleted Successfully';
-
       }, err => {
         this.error = err.error.error.sqlMessage;
       });

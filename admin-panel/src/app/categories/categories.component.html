@@ -48,14 +48,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let category of categories">
-                                    <td>{{ category.id }}</td>
+                                <tr *ngFor="let category of categories; let i = index">
+                                    <td>{{ i+1 }}</td>
                                     <td>{{ category.name }}</td>
-                                    <td>{{ category.imagePath }}</td>
-                                    <td>{{ category.description }}</td>
-                                    <td>{{ category.createdAt }}
+                                    <td>
+                                        <img src="{{ category.imagePath }}" class="img-fluid" alt="">
                                     </td>
-                                    <td>{{ category.updatedAt ?  category.updatedAt.split('T')[0] : 'Not Updated Yet'  }}
+                                    <td>{{ category.description | slice:0:50 }}... </td>
+                                    <td>{{ category.createdAt | date:'mediumDate' }}
+                                    </td>
+                                    <td>{{ category.updatedAt ?  (category.updatedAt | date:'mediumDate') : 'Not Updated Yet'  }}
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-md" data-toggle="modal"
@@ -63,7 +65,7 @@
                                             UPDATE
                                         </button>
                                         <button type="button" class="btn btn-danger btn-md"
-                                            (click)="deleteCategory(category.id)">
+                                            (click)="deleteCategory(category.id, i)">
                                             DELETE
                                         </button>
                                     </td>
