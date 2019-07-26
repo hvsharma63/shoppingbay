@@ -10,11 +10,11 @@ export class ProductsService {
     constructor(private http: HttpClient) { }
 
     public getAllProducts(): Observable<any> {
-        return this.http.get('http://localhost:3500/products');
+        return this.http.get('/api/products');
     }
 
     public getProductById(id: number): Observable<any> {
-        return this.http.get('http://localhost:3500/products/' + id);
+        return this.http.get('/api/products/' + id);
     }
 
     public createProduct(product: FormData): Observable<any> {
@@ -22,25 +22,25 @@ export class ProductsService {
         for (const key in product) {
             console.log(key, product[key]);
         }
-        return this.http.post('http://localhost:3500/products/create', product);
+        return this.http.post('/api/products/create', product);
     }
 
     public updateProduct(id: string, product: any): Observable<any> {
         console.log(id, product);
 
-        return this.http.put('http://localhost:3500/products/' + id + '/update', product);
+        return this.http.put('/api/products/' + id + '/update', product);
     }
 
     public deleteProduct(id: string | number): Observable<any> {
-        return this.http.delete('http://localhost:3500/products/' + id + '/delete');
+        return this.http.delete('/api/products/' + id + '/delete');
     }
 
     public getAllProductsRating(): Observable<any> {
-        return this.http.get('http://localhost:3500/products/ratings');
+        return this.http.get('/api/products/ratings');
     }
 
     public deleteProductsRating(id: number): Observable<any> {
-        return this.http.delete('http://localhost:3500/products/' + id + '/rating/delete');
+        return this.http.delete('/api/products/' + id + '/rating/delete');
     }
 
 }

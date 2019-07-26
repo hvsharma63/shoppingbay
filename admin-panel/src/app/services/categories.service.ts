@@ -11,11 +11,11 @@ export class CategoriesService {
     constructor(private http: HttpClient) { }
 
     public getAllCategories(): Observable<object> {
-        return this.http.get('http://localhost:3500/categories');
+        return this.http.get('/api/categories');
     }
 
     public getCategoryById(id: number): Observable<any> {
-        return this.http.get('http://localhost:3500/categories/' + id);
+        return this.http.get('/api/categories/' + id);
     }
 
     public createCategory(category: FormData): Observable<any> {
@@ -23,18 +23,18 @@ export class CategoriesService {
         console.log(category.getAll('description'));
         console.log(category.getAll('imagePath'));
         console.log(category.getAll('categoryImage'));
-        return this.http.post('http://localhost:3500/categories/create', category);
+        return this.http.post('/api/categories/create', category);
     }
 
     public updateCategory(id: string, category: any): Observable<any> {
-        return this.http.put('http://localhost:3500/categories/' + id + '/update', category);
+        return this.http.put('/api/categories/' + id + '/update', category);
     }
 
     public deleteCategory(id: string | number): Observable<any> {
-        return this.http.delete('http://localhost:3500/categories/' + id + '/delete');
+        return this.http.delete('/api/categories/' + id + '/delete');
     }
 
     public getCategoriesByName(): Observable<any> {
-        return this.http.get('http://localhost:3500/categories/names');
+        return this.http.get('/api/categories/names');
     }
 }

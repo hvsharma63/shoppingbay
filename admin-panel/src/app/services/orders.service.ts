@@ -10,10 +10,10 @@ export class OrdersService {
     constructor(private http: HttpClient) { }
 
     public getAllOrders(): Observable<any> {
-        return this.http.get('http://localhost:3500/orders');
+        return this.http.get('/api/orders');
     }
     public getSingleOrderDetails(id: number): Observable<any> {
-        return this.http.get('http://localhost:3500/orders/' + id + '/products');
+        return this.http.get('/api/orders/' + id + '/products');
     }
 
 
