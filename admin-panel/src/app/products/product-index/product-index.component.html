@@ -32,6 +32,9 @@
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Price</th>
+                                    <th>Discount Price</th>
+                                    <th>Deal Start Date</th>
+                                    <th>Deal End Date</th>
                                     <th>SKU</th>
                                     <th>Thumbnail</th>
                                     <th>Total Views</th>
@@ -49,6 +52,9 @@
                                     <td>{{ product.name }}</td>
                                     <td>{{ product.description | slice:0:50  }}...</td>
                                     <td>{{ product.price }}</td>
+                                    <td>{{ product.discount ? product.discount : 'No Deal found' }}</td>
+                                    <td>{{ product.startDate ? product.startDate.split('T')[0] : '----' }}</td>
+                                    <td>{{ product.endDate ? product.endDate.split('T')[0] : '----' }}</td>
                                     <td>{{ product.sku }}</td>
                                     <td>
                                         <img src="{{ product.imagePath }}" class="img-fluid" alt="">

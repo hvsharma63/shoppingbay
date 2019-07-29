@@ -144,7 +144,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Discount</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" formControlName="discount" required />
+                                        <input type="text" class="form-control" formControlName="discount" />
                                         <span class="text-danger"
                                             *ngFor="let validation of productValidationMessages.discount">
                                             <span class="text-danger"
@@ -161,7 +161,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Start Date</label>
                                     <div class="col-sm-9">
-                                        <input type="date" class="form-control" formControlName="startDate" required
+                                        <input type="date" class="form-control" formControlName="startDate"
                                             (input)="getStartDate($event.target.value)" />
                                         <span class="text-danger"
                                             *ngFor="let validation of productValidationMessages.startDate">
@@ -177,7 +177,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">End Date</label>
                                     <div class="col-sm-9">
-                                        <input class="form-control" type="date" formControlName="endDate" required
+                                        <input class="form-control" type="date" formControlName="endDate"
                                             (input)="getEndDate($event.target.value)" />
                                         <span class="text-danger"
                                             *ngFor="let validation of productValidationMessages.endDate">

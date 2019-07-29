@@ -48,15 +48,12 @@ export class ProductUpdateComponent implements OnInit {
       { type: 'pattern', message: 'Should be Number' },
     ],
     startDate: [
-      { type: 'required', message: 'Required' },
       { type: 'match', message: 'Start Date cannot be ahead of End Date' },
     ],
     endDate: [
-      { type: 'required', message: 'Required' },
       { type: 'match', message: 'End Date cannot be in advance of Start Date' },
     ],
     discount: [
-      { type: 'required', message: 'required' },
       { type: 'pattern', message: 'Should be Number' }
     ],
   };
@@ -72,9 +69,9 @@ export class ProductUpdateComponent implements OnInit {
       imagePath: new FormControl(null),
       price: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
       stock: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
-      startDate: new FormControl(null, [Validators.required, this.validateStartDate.bind(this)]),
-      endDate: new FormControl(null, [Validators.required, this.validateEndDate.bind(this)]),
-      discount: new FormControl(null, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
+      startDate: new FormControl(null, [this.validateStartDate.bind(this)]),
+      endDate: new FormControl(null, [this.validateEndDate.bind(this)]),
+      discount: new FormControl(null, [Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
     });
     this.catService.getCategoriesByName().subscribe(categories => {
       this.categories = categories;
@@ -84,6 +81,7 @@ export class ProductUpdateComponent implements OnInit {
       this.productService.getProductById(params.id).subscribe(res => {
         this.productId = params.id;
         this.productImage = res.imagePath;
+        console.log(res);
         this.updateProduct.patchValue({
           name: res.name,
           categoryId: res.categoryId,
@@ -92,7 +90,9 @@ export class ProductUpdateComponent implements OnInit {
           imagePath: res.imagePath,
           price: res.price,
           stock: String(res.stock),
-          stockAvailability: res.stockAvailability,
+          discount: res.discount,
+          startDate: res.startDate ? res.startDate.split('T')[0] : null,
+          endDate: res.endDate ? res.endDate.split('T')[0] : null
         });
       });
     });
@@ -122,7 +122,10 @@ export class ProductUpdateComponent implements OnInit {
     if (this.updateProduct.invalid) {
       return this.error = 'Must fill all values';
     }
+    console.log(this.updateProduct.value);
+
     this.productService.updateProduct(this.productId, this.updateProduct.value).subscribe(res => {
+      console.log(res);
       this.success = 'Product Updated Successfully';
     },
       err => {

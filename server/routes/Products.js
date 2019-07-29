@@ -40,7 +40,7 @@ process.env.SECRET_KEY = 'solution_analyst'
 // Retrieve all products {{ ADMIN }}
 products.get('/', auth, (req, res) => {
     console.log(req.query);
-    pool.query(`SELECT Products.*, Deals.*, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id;`, (err, result) => {
+    pool.query(`SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id;`, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
             res.status(200).send({ message: 'No products found.' })
@@ -155,56 +155,96 @@ products.post('/create', upload.single('productImage'), auth, async (req, res, n
 
 // Get specific product
 products.get('/:id', auth, async (req, res) => {
-    console.log("called from get id");
-    // try {
-    //     const productSearch = await pool.execute('SELECT * FROM Products LEFT JOIN Deals ON Products.id = Deals.productId');
-    //     res.send(productSearch);
-    // } catch (error) {
-    //     res.send(error)
-    // }
-    pool.query(`SELECT * from Products WHERE id = ${req.params.id}`, (err, result) => {
-        if (err) res.status(500).send({ error: err })
-        if (result.length == 0) {
-            res.status(400).send({ message: 'No product found by this ID' })
-        } else {
-            result[0].price = (result[0].price).toString();
-            result[0].stock = (result[0].stock).toString();
-            // result[0].stockAvailability = (Boolean(result[0].stockAvailability)).toString();
-            console.log(result[0]);
-            res.status(200).send(result[0])
-        }
-    });
+    try {
+        const productSearch = await pool.execute('SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId FROM Products LEFT JOIN Deals ON Deals.productId = Products.id WHERE Products.id = ? ', [req.params.id]);
+        res.status(200).send(productSearch[0][0]);
+    } catch (error) {
+        res.status(500).send({ error: error })
+    }
 })
 
 // Update specific product
-products.put('/:id/update', auth, (req, res) => {
-    console.log(req.params.id);
+products.put('/:id/update', auth, async (req, res) => {
     req.body.price = parseFloat(req.body.price);
     req.body.stock = parseInt(req.body.stock);
+    req.body.discount = parseFloat(req.body.discount);
+    deleteDiscount = false;
+    if (req.body.stock > 0) {
+        req.body.stockAvailability = true;
+    } else {
+        req.body.stockAvailability = false;
+    }
+    if (req.body.startDate == '' || req.body.endDate == '' || req.body.discount == '' || isNaN(req.body.discount) ||
+        req.body.startDate === null || req.body.endDate === null || req.body.discount === null) {
+        deleteDiscount = true;
+    }
     console.log(req.body);
-    pool.query(`UPDATE Products SET name='${req.body.name}', categoryId=${req.body.categoryId},
-    description='${req.body.description}', sku='${req.body.sku}',imagePath='${req.body.imagePath}', price=${req.body.price},
-    stock=${req.body.stock},stockAvailability='${req.body.stockAvailability}',updatedAt=CURDATE() WHERE id=${req.params.id}`,
-        (err, result) => {
-            if (err) res.status(500).send({ error: err })
-            if (result) {
-                res.status(200).send(result);
+    try {
+        const productUpdate = await pool.execute(`UPDATE Products SET name='${req.body.name}', categoryId=${req.body.categoryId},
+        description='${req.body.description}', sku='${req.body.sku}',imagePath='${req.body.imagePath}', price=${req.body.price},
+        stock=${req.body.stock},stockAvailability=${req.body.stockAvailability},updatedAt=CURDATE() WHERE id=${req.params.id}`);
+        if (productUpdate) {
+            if (!deleteDiscount) {
+                const dealSearch = await pool.execute(`SELECT * FROM Deals WHERE productId=${req.params.id}`)
+                if (dealSearch[0].length == 0) {
+                    sql = `INSERT INTO Deals (productId, discount, startDate, endDate, createdAt) VALUES ( ${req.params.id}, ${req.body.discount}, '${req.body.startDate}', '${req.body.endDate}', CURDATE())`
+                } else {
+                    sql = `UPDATE Deals SET discount = ${req.body.discount}, startDate = '${req.body.startDate}', endDate = '${req.body.endDate}',updatedAt=CURDATE() 
+                    WHERE productId = ${req.params.id}`;
+                }
             }
+            if (deleteDiscount) {
+                sql = `DELETE FROM Deals WHERE productId=${req.params.id}`;
+            }
+            const dealUpdate = await pool.execute(sql);
+            console.log(dealUpdate[0]);
+            if (dealUpdate) {
+                return res.status(200).send({
+                    success: 'true',
+                    message: "Product & Deal Updated Successfully",
+                    product: productUpdate,
+                    deal: dealUpdate
+                });
+            }
+            return res.status(200).send({
+                success: 'true',
+                message: "Product Updated Successfully",
+                product: productUpdate,
+            });
         }
-    )
+    } catch (error) {
+        res.status(500).send({ error: err })
+    }
+    // pool.query(`UPDATE Products SET name='${req.body.name}', categoryId=${req.body.categoryId},
+    // description='${req.body.description}', sku='${req.body.sku}',imagePath='${req.body.imagePath}', price=${req.body.price},
+    // stock=${req.body.stock},stockAvailability='${req.body.stockAvailability}',updatedAt=CURDATE() WHERE id=${req.params.id}`,
+    //     (err, result) => {
+    //         if (err) res.status(500).send({ error: err })
+    //         if (result) {
+    //             res.status(200).send(result);
+    //         }
+    //     }
+    // )
 
 })
 
 // Delete specific product
-products.delete('/:id/delete', auth, (req, res) => {
-    pool.query(`DELETE FROM Products WHERE id=${req.params.id}`,
-        (err, result) => {
-            if (err) res.status(500).send({ error: err })
-            if (result) {
-                res.status(200).send(result);
-            }
-        }
-    )
+products.delete('/:id/delete', auth, async (req, res) => {
+    try {
+        const productDelete = pool.execute(`DELETE FROM Products WHERE id=${req.params.id}`);
+        const dealDelete = await pool.execute(`DELETE FROM Deals WHERE productId=${req.params.id}`);
+        res.status(200).send({ product: productDelete, deal: dealDelete });
+    } catch (error) {
+        res.status(500).send({ error: error })
+    }
+    // pool.query(`DELETE FROM Products WHERE id=${req.params.id}`,
+    //     (err, result) => {
+    //         if (err) res.status(500).send({ error: err })
+    //         if (result) {
+    //             res.status(200).send(result);
+    //         }
+    //     }
+    // )
 })
 
 // Delete specific product
