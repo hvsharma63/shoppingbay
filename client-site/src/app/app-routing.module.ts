@@ -6,6 +6,8 @@ import { HomeComponent } from './home/home.component';
 import { ForgotPasswordComponent } from './password/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
 import { HomeContentComponent } from './home/home-content/home-content.component';
+import { ProductComponent } from './product/product.component';
+import { ProductDetailComponent } from './product/product-detail/product-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -14,6 +16,12 @@ const routes: Routes = [
       { path: '', component: HomeContentComponent, pathMatch: 'full' },
     ]
   },
+  {
+    path: 'product-detail/:productName', component: ProductComponent, children: [
+      { path: '', component: ProductDetailComponent, pathMatch: 'full' },
+    ]
+  },
+
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'forgotPassword', component: ForgotPasswordComponent },

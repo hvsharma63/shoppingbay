@@ -120,10 +120,12 @@ export class ProductAddComponent implements OnInit {
     );
   }
   getStartDate(date: string) {
+    console.log(date);
     this.startDate = date;
   }
 
   getEndDate(date: string) {
+    console.log(date);
     this.endDate = date;
   }
 

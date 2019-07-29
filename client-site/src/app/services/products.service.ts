@@ -13,4 +13,11 @@ export class ProductService {
         return this.http.get('/api/products/search?products=' + term);
     }
 
+    getAllProducts(): Observable<any> {
+        return this.http.get('/api/products');
+    }
+
+    getProductById(id: number): Observable<any> {
+        return this.http.get('/api/products/' + id + '?all=true');
+    }
 }

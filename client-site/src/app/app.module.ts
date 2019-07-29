@@ -15,10 +15,13 @@ import { ResetPasswordComponent } from './password/reset-password/reset-password
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HomeContentComponent } from './home/home-content/home-content.component';
-
+import { ProductComponent } from './product/product.component';
+import { KebabPipe } from './shared/pipes/kebab.pipe';
+import { ProductDetailComponent } from './product/product-detail/product-detail.component';
 @NgModule({
   declarations: [
     AppComponent,
+    KebabPipe,
     HomeComponent,
     RegisterComponent,
     LoginComponent,
@@ -28,7 +31,9 @@ import { HomeContentComponent } from './home/home-content/home-content.component
     ResetPasswordComponent,
     HeaderComponent,
     FooterComponent,
-    HomeContentComponent
+    HomeContentComponent,
+    ProductComponent,
+    ProductDetailComponent
   ],
   imports: [
     BrowserModule,
