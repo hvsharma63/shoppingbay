@@ -215,16 +215,6 @@ products.put('/:id/update', auth, async (req, res) => {
     } catch (error) {
         res.status(500).send({ error: err })
     }
-    // pool.query(`UPDATE Products SET name='${req.body.name}', categoryId=${req.body.categoryId},
-    // description='${req.body.description}', sku='${req.body.sku}',imagePath='${req.body.imagePath}', price=${req.body.price},
-    // stock=${req.body.stock},stockAvailability='${req.body.stockAvailability}',updatedAt=CURDATE() WHERE id=${req.params.id}`,
-    //     (err, result) => {
-    //         if (err) res.status(500).send({ error: err })
-    //         if (result) {
-    //             res.status(200).send(result);
-    //         }
-    //     }
-    // )
 
 })
 
@@ -237,14 +227,6 @@ products.delete('/:id/delete', auth, async (req, res) => {
     } catch (error) {
         res.status(500).send({ error: error })
     }
-    // pool.query(`DELETE FROM Products WHERE id=${req.params.id}`,
-    //     (err, result) => {
-    //         if (err) res.status(500).send({ error: err })
-    //         if (result) {
-    //             res.status(200).send(result);
-    //         }
-    //     }
-    // )
 })
 
 // Delete specific product
