@@ -40,6 +40,7 @@ export class HomeContentComponent implements OnInit {
     this.productsService.getAllDiscountedProducts()
       .subscribe(res => {
         this.discountedProducts = res;
+        console.log(res);
       });
   }
 

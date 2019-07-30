@@ -46,7 +46,7 @@ products.get('/', (req, res) => {
     } else if (req.query.hasOwnProperty('limit') && req.query.limit == 6) {
         query = `SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.createdAt DESC LIMIT 6;`
     } else if (req.query.hasOwnProperty('limit') && req.query.limit == 8) {
-        query = `SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.createdAt DESC LIMIT 8;`
+        query = `SELECT Products.*, Deals.discount FROM Products LEFT JOIN Deals ON Deals.productId = Products.id WHERE Deals.productId = Products.id ORDER BY Products.createdAt DESC LIMIT 8;`
     }
     pool.query(query, (err, result) => {
         if (err) res.status(500).send({ error: err })

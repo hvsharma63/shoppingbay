@@ -309,13 +309,7 @@
                         <div class="d-flex">
                             <div class="pricing">
                                 <p class="price">
-                                    <span *ngIf="!product.discount">
-                                        <span class="price-sale" *ngIf="product.price">${{ product.price }}
-                                        </span>
-                                    </span>
                                     <span *ngIf="product.discount">
-                                        <span class="mr-2 price-dc" *ngIf="product.price">${{ product.price }}
-                                        </span>
                                         <span class="price-sale" *ngIf="product.discount">${{ product.discount }}
                                         </span>
                                     </span>

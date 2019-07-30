@@ -223,10 +223,10 @@ users.post('/user/changePassword', auth, (req, res) => {
 // RESET Password {{ USER }}
 users.post('/user/resetPassword', (req, res) => {
     console.log(req.body);
-    if (validator.isEmail(req.body.email) === false) {
+    if (!validator.isEmail(req.body.email)) {
         return res.status(500).send({ message: "There must be something wrong with email" })
     }
-    if (validator.matches(req.body.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])1.*$/) === false) {
+    if (!validator.matches(req.body.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/)) {
         return res.status(500).send({ message: "password does not match the criteria" })
     }
     pool.query(`SELECT * from Users WHERE id ='${req.body.userId}' AND email ='${req.body.email}'`, (err, result) => {
