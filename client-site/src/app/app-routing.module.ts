@@ -10,6 +10,8 @@ import { ProductComponent } from './product/product.component';
 import { ProductDetailComponent } from './product/product-detail/product-detail.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { CategoriesDetailComponent } from './categories/categories-detail/categories-detail.component';
+import { ShopComponent } from './shop/shop.component';
+import { ShopIndexComponent } from './shop/shop-index/shop-index.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -26,6 +28,11 @@ const routes: Routes = [
   {
     path: 'category-detail/:categoryName', component: CategoriesComponent, children: [
       { path: '', component: CategoriesDetailComponent, pathMatch: 'full' },
+    ]
+  },
+  {
+    path: 'shop', component: ShopComponent, children: [
+      { path: '', component: ShopIndexComponent, pathMatch: 'full' },
     ]
   },
   { path: 'register', component: RegisterComponent },

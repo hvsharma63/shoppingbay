@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
       },
       err => {
         console.log(err);
-        if (err.message.includes('Unknown')) {
+        if (err.message.includes('Unknown') || err.status === 504) {
           this.error = 'Something went wrong';
         } else {
           this.error = err.error.message;

@@ -22,6 +22,9 @@ import { ProductDetailComponent } from './product/product-detail/product-detail.
 import { CategoriesComponent } from './categories/categories.component';
 import { CategoriesDetailComponent } from './categories/categories-detail/categories-detail.component';
 import { RatingsComponent } from './shared/ratings/ratings.component';
+import { ShopComponent } from './shop/shop.component';
+import { ShopIndexComponent } from './shop/shop-index/shop-index.component';
+import { SidebarComponent } from './layout/sidebar/sidebar.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +44,9 @@ import { RatingsComponent } from './shared/ratings/ratings.component';
     CategoriesComponent,
     CategoriesDetailComponent,
     RatingsComponent,
+    ShopComponent,
+    ShopIndexComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,
