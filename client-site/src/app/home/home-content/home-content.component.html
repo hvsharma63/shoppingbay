@@ -101,13 +101,14 @@
         <div class="row">
             <div class="col-sm col-md-6 col-lg" *ngFor="let category of categories">
                 <div class="product">
-                    <a href="#" class="img-prod"><img class="img-fluid" src="{{category.imagePath}}"
-                            alt="Colorlib Template">
+                    <a [routerLink]="['/category-detail', (category.name | kebab)]" [queryParams]="{ cid: category.id}"
+                        class="img-prod"><img class="img-fluid" src="{{category.imagePath}}" alt="Colorlib Template">
                         <!-- <span class="status">30%</span> -->
                         <div class="overlay"></div>
                     </a>
                     <div class="text py-3 px-3">
-                        <h3><a href="#">{{ category.name }}</a></h3>
+                        <h3><a [routerLink]="['/category-detail', (category.name | kebab)]"
+                                [queryParams]="{ cid: category.id}">{{ category.name }}</a></h3>
                         <!-- <div class="d-flex">
                             <div class="pricing">
                                 <p class="price"><span class="mr-2 price-dc">$120.00</span><span
@@ -190,7 +191,8 @@
                         <div class="overlay"></div>
                     </a>
                     <div class="text py-3 px-3">
-                        <h3><a href="#">{{ product.name }}</a></h3>
+                        <h3><a [routerLink]="['/product-detail', (product.name | kebab)]"
+                                [queryParams]="{ pid: product.id}">{{ product.name }}</a></h3>
                         <div class="d-flex">
                             <div class="pricing">
                                 <p class="price">
@@ -240,6 +242,47 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-3" *ngFor="let product of recentViewedProducts">
+                <div class="product">
+                    <a [routerLink]="['/product-detail', (product.product | kebab)]"
+                        [queryParams]="{ pid: product.productId}" class="img-prod"><img class="img-fluid"
+                            src="{{ product.imagePath }}" alt="Colorlib Template">
+                        <div class="overlay"></div>
+                    </a>
+                    <div class="text py-3 px-3">
+                        <h3><a [routerLink]="['/product-detail', (product.product | kebab)]"
+                                [queryParams]="{ pid: product.productId}">{{ product.product }}</a></h3>
+                        <div class="d-flex">
+                            <div class="pricing">
+                                <p class="price">
+                                    <span *ngIf="!product.discount">
+                                        <span class="price-sale" *ngIf="product.price">${{ product.price }}
+                                        </span>
+                                    </span>
+                                    <span *ngIf="product.discount">
+                                        <span class="mr-2 price-dc" *ngIf="product.price">${{ product.price }}
+                                        </span>
+                                        <span class="price-sale" *ngIf="product.discount">${{ product.discount }}
+                                        </span>
+                                    </span>
+                                </p>
+                            </div>
+
+                        </div>
+                        <p class="bottom-area d-flex px-3">
+                            <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i
+                                        class="ion-ios-add ml-1"></i></span></a>
+                            <a href="#" class="buy-now text-center py-2">Buy now<span><i
+                                        class="ion-ios-cart ml-1"></i></span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </section>
 
 <!-- Deals of the Day -->
@@ -254,14 +297,15 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-sm col-md-6 col-lg" *ngFor="let product of discountedProducts">
+            <div class="col-sm-2 col-md-2 col-lg-3" *ngFor="let product of discountedProducts">
                 <div class="product">
-                    <a href="#" class="img-prod"><img class="img-fluid" src="{{ product.imagePath }}"
-                            alt="Colorlib Template">
+                    <a [routerLink]="['/product-detail', (product.name | kebab)]" [queryParams]="{ pid: product.id}"
+                        class="img-prod"><img class="img-fluid" src="{{ product.imagePath }}" alt="Colorlib Template">
                         <div class="overlay"></div>
                     </a>
                     <div class="text py-3 px-3">
-                        <h3><a href="#">{{ product.name }}</a></h3>
+                        <h3><a [routerLink]="['/product-detail', (product.name | kebab)]"
+                                [queryParams]="{ pid: product.id}">{{ product.name }}</a></h3>
                         <div class="d-flex">
                             <div class="pricing">
                                 <p class="price">

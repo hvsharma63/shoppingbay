@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const pool = require("../config/db")
-const auth = require('../middleware/authenticateUser')
+const auth = require('../middleware/authenticateAdmin')
 const deals = express.Router()
 deals.use(cors())
 

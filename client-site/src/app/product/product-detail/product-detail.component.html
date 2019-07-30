@@ -11,9 +11,7 @@
                 <div class="rating d-flex" *ngIf="product.ratings">
                     <p class="text-left mr-4" style="color:blue">
                         <span class="mr-2">{{product.ratings}}</span>
-                        <span class="ion-ios-star" *ngFor="let item of fullStarArray"></span>
-                        <span class="ion-ios-star-half" *ngFor="let item of halfStarArray"></span>
-                        <span class="ion-ios-star-outline" *ngFor="let item of starOutlineArray"></span>
+                        <app-ratings [totalRating]="product.ratings" *ngIf="ratings"></app-ratings>
                     </p>
                 </div>
                 <p class="price">

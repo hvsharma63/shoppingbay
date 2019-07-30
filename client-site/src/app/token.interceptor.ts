@@ -13,6 +13,7 @@ export class TokenInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // console.log(request.url.indexOf('/login'));
         if (request.url.indexOf('/login') === -1) {
+            console.log(this.auth.getToken());
             request = request.clone({
                 setHeaders: {
                     Authorization: `${this.auth.getToken()}`

@@ -1,7 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const pool = require("../config/db")
-const auth = require('../middleware/authenticateUser')
+const auth = require('../middleware/authenticateAdmin')
+const isLoggedIn = require('../middleware/isLoggedIn');
 const products = express.Router()
 
 const multer = require('multer');
@@ -37,10 +38,17 @@ const upload = multer({
 products.use(cors())
 
 process.env.SECRET_KEY = 'solution_analyst'
-// Retrieve all products {{ ADMIN }} 
+// Retrieve all products {{ ADMIN, USER }} 
 products.get('/', (req, res) => {
     console.log(req.query);
-    pool.query(`SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id;`, (err, result) => {
+    if (Object.entries(req.query).length === 0) {
+        query = `SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id;`;
+    } else if (req.query.hasOwnProperty('limit') && req.query.limit == 6) {
+        query = `SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.createdAt DESC LIMIT 6;`
+    } else if (req.query.hasOwnProperty('limit') && req.query.limit == 8) {
+        query = `SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.createdAt DESC LIMIT 8;`
+    }
+    pool.query(query, (err, result) => {
         if (err) res.status(500).send({ error: err })
         if (result.length == 0) {
             res.status(200).send({ message: 'No products found.' })
@@ -93,7 +101,23 @@ products.get('/ratings', auth, (req, res) => {
 
 })
 
+// GET All Products Rating
+products.get('/recent', isLoggedIn, async (req, res) => {
+    try {
+        const products = await pool.execute(`SELECT RecentViews.*, Deals.discount, Products.imagePath, Products.price, Products.name as product FROM RecentViews 
+        LEFT JOIN Products on RecentViews.productId = Products.id
+        LEFT JOIN Deals on Products.id = Deals.productId 
+        ORDER BY RecentViews.createdAt DESC LIMIT 8`);
+        console.log(products[0]);
+        if (products) {
+            res.status(200).send(products[0])
+        }
+    } catch (error) {
+        res.status(500).send({ error: error })
 
+    }
+
+})
 // Create product
 products.post('/create', upload.single('productImage'), auth, async (req, res, next) => {
     console.log("some");
@@ -154,18 +178,22 @@ products.post('/create', upload.single('productImage'), auth, async (req, res, n
 })
 
 // Get specific product
-products.get('/:id', async (req, res) => {
-    if (Object.entries(req.query).length === 0) {
-        query = `SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId FROM Products LEFT JOIN Deals ON Deals.productId = Products.id WHERE Products.id = ${req.params.id}`;
-    } else if (req.query.hasOwnProperty('all')) {
-        query = `SELECT Products.*, Categories.name as category, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId FROM Products 
-        LEFT JOIN Categories ON Categories.id = Products.categoryId
-        LEFT JOIN Deals ON Deals.productId = Products.id
-        WHERE Products.id = ${req.params.id}`
-        const averageRating = await pool.execute(`SELECT AVG(rating) as ratings FROM ProductRatings WHERE productID=${req.params.id}`)
-        this.productRating = averageRating[0][0].ratings;
-    }
+products.get('/:id', isLoggedIn, async (req, res) => {
     try {
+        console.log(req.user);
+        if (Object.entries(req.query).length === 0) {
+            query = `SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId FROM Products LEFT JOIN Deals ON Deals.productId = Products.id WHERE Products.id = ${req.params.id}`;
+        } else if (req.query.hasOwnProperty('all')) {
+            query = `SELECT Products.*, Categories.name as category, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId FROM Products 
+            LEFT JOIN Categories ON Categories.id = Products.categoryId
+            LEFT JOIN Deals ON Deals.productId = Products.id
+            WHERE Products.id = ${req.params.id}`
+            if (req.user !== undefined) {
+                const insertRecentView = await pool.execute(`INSERT INTO RecentViews (userId, productId) SELECT ${req.user.id},${req.params.id} WHERE NOT EXISTS (SELECT * FROM RecentViews WHERE userId = ${req.user.id} AND productId = ${req.params.id});`)
+            }
+            const averageRating = await pool.execute(`SELECT AVG(rating) as ratings FROM ProductRatings WHERE productID=${req.params.id}`)
+            this.productRating = averageRating[0][0].ratings;
+        }
         const productSearch = await pool.execute(query);
         productSearch[0][0].ratings = this.productRating;
         console.log(productSearch[0][0]);

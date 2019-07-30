@@ -12,4 +12,8 @@ export class CategoryService {
     getLatestCategories(): Observable<any> {
         return this.http.get('/api/categories?latest=true');
     }
+
+    getAllProductsByCategoryID(Id: number): Observable<any> {
+        return this.http.get('/api/categories/' + Id + '/products');
+    }
 }

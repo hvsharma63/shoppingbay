@@ -8,6 +8,8 @@ import { ResetPasswordComponent } from './password/reset-password/reset-password
 import { HomeContentComponent } from './home/home-content/home-content.component';
 import { ProductComponent } from './product/product.component';
 import { ProductDetailComponent } from './product/product-detail/product-detail.component';
+import { CategoriesComponent } from './categories/categories.component';
+import { CategoriesDetailComponent } from './categories/categories-detail/categories-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -21,7 +23,11 @@ const routes: Routes = [
       { path: '', component: ProductDetailComponent, pathMatch: 'full' },
     ]
   },
-
+  {
+    path: 'category-detail/:categoryName', component: CategoriesComponent, children: [
+      { path: '', component: CategoriesDetailComponent, pathMatch: 'full' },
+    ]
+  },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'forgotPassword', component: ForgotPasswordComponent },

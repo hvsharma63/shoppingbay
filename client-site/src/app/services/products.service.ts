@@ -14,10 +14,18 @@ export class ProductService {
     }
 
     getAllProducts(): Observable<any> {
-        return this.http.get('/api/products');
+        return this.http.get('/api/products?limit=6');
+    }
+
+    getAllDiscountedProducts(): Observable<any> {
+        return this.http.get('/api/products?limit=8');
     }
 
     getProductById(id: number): Observable<any> {
         return this.http.get('/api/products/' + id + '?all=true');
+    }
+
+    getRecentlyViewedProducts(): Observable<any> {
+        return this.http.get('/api/products/recent');
     }
 }

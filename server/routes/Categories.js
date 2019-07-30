@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const pool = require("../config/db")
-const auth = require('../middleware/authenticateUser')
+const auth = require('../middleware/authenticateAdmin')
 const categories = express.Router()
 const validator = require('validator')
 // Image Upload Configs
@@ -137,6 +137,26 @@ categories.delete('/:id/delete', auth, (req, res) => {
             }
         }
     )
+})
+
+// Get specific category
+categories.get('/:id/products', async (req, res) => {
+    try {
+        const result = await pool.execute(`SELECT Products.id as productId, Products.imagePath as productImage, Products.name as product, Products.price, Deals.discount,          
+        AVG(ProductRatings.rating) as rating FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id 
+        LEFT JOIN ProductRatings ON ProductRatings.productId = Products.id 
+        WHERE categoryId = ${req.params.id} GROUP BY ProductRatings.productId, Products.categoryId;`);
+        if (result.length == 0) {
+            res.status(400).send({ message: 'No Products found by this Category ID' })
+        } else {
+            res.status(200).send(result[0])
+        }
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).send({ error: error })
+    }
 })
 
 

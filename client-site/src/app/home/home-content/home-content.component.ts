@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/services/products.service';
 import { CategoryService } from 'src/app/services/categories.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
-import { map, tap, filter } from 'rxjs/operators';
 @Component({
   selector: 'app-home-content',
   templateUrl: './home-content.component.html',
@@ -19,41 +18,45 @@ export class HomeContentComponent implements OnInit {
   categories = [];
   products = [];
   discountedProducts = [];
+  recentViewedProducts = [];
   ngOnInit() {
     this.getLatestCategories();
     this.getAllProducts();
     this.isLoggedIn = this.authService.isLoggedIn();
     this.getAllDiscountedProducts();
+    if (this.isLoggedIn) {
+      this.getRecentViewProducts();
+    }
   }
 
   getAllProducts() {
     this.productsService.getAllProducts()
-      .subscribe(res => this.products = res);
+      .subscribe(res => {
+        this.products = res;
+      });
   }
 
   getAllDiscountedProducts() {
-
-    this.productsService.getAllProducts()
-      .pipe(
-        map(data => {
-          data.forEach(product => {
-            if (product.discount) {
-              this.discountedProducts.push(product);
-            }
-          }
-          );
-          return this.discountedProducts;
-        }))
-      // tslint:disable-next-line: deprecation
-      .subscribe();
+    this.productsService.getAllDiscountedProducts()
+      .subscribe(res => {
+        this.discountedProducts = res;
+      });
   }
+
   getLatestCategories() {
     this.categoryService.getLatestCategories()
       .subscribe(res => this.categories = res);
   }
+
+  getRecentViewProducts() {
+    this.productsService.getRecentlyViewedProducts()
+      .subscribe(res => {
+        this.recentViewedProducts = res;
+      });
+  }
+
   searchProduct(searchTerm) {
     this.productsService.searchEntries(searchTerm)
       .subscribe(res => this.searchResult = res);
-    console.log(this.searchResult);
   }
 }
