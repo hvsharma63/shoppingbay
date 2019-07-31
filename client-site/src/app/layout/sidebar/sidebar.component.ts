@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from 'src/app/services/products.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  constructor(private productService: ProductService) { }
 
   ngOnInit() {
+
   }
 
+  getFilterOption(value: string) {
+    this.productService.shareFilteredOption(value);
+  }
 }

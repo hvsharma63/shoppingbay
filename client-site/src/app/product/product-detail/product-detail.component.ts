@@ -10,14 +10,6 @@ import { ProductService } from 'src/app/services/products.service';
 export class ProductDetailComponent implements OnInit {
 
   product = [];
-  productRating = null;
-  fullStar = null;
-  fullStarArray = [];
-  halfStar = null;
-  halfStarArray = [];
-  starOutline = null;
-  starOutlineArray = [];
-  ratings = false;
   constructor(private route: ActivatedRoute, private productService: ProductService) { }
   ngOnInit() {
     // tslint:disable-next-line: radix
@@ -25,7 +17,6 @@ export class ProductDetailComponent implements OnInit {
     this.productService.getProductById(pid).subscribe(res => {
       this.product = res;
       if (res.ratings !== undefined) {
-        this.ratings = true;
       }
     });
 

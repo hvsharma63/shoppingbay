@@ -11,7 +11,7 @@
                 <div class="rating d-flex" *ngIf="product.ratings">
                     <p class="text-left mr-4" style="color:blue">
                         <span class="mr-2">{{product.ratings}}</span>
-                        <app-ratings [totalRating]="product.ratings" *ngIf="ratings"></app-ratings>
+                        <app-ratings [totalRating]="product.ratings" *ngIf="product.ratings"></app-ratings>
                     </p>
                 </div>
                 <p class="price">

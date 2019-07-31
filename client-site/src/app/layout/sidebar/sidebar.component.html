@@ -10,7 +10,7 @@
         </li>
         <li>
             <label for="filter">Filter Products</label> <br>
-            <select class="form-control-sm">
+            <select class="form-control-sm" (input)="getFilterOption($event.target.value)">
                 <option value="new">Newest First</option>
                 <option value="purchased">Most Purchased</option>
                 <option value="viewed">Most Viewed</option>

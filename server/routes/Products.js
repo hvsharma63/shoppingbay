@@ -47,6 +47,21 @@ products.get('/', (req, res) => {
         query = `SELECT Products.*, Deals.discount, Deals.startDate, Deals.endDate, Deals.id as DealId, Categories.name as category FROM Products LEFT JOIN Categories ON Categories.id = Products.categoryId LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.createdAt DESC LIMIT 6;`
     } else if (req.query.hasOwnProperty('limit') && req.query.limit == 8) {
         query = `SELECT Products.*, Deals.discount FROM Products LEFT JOIN Deals ON Deals.productId = Products.id WHERE Deals.productId = Products.id ORDER BY Products.createdAt DESC LIMIT 8;`
+    } else if (req.query.hasOwnProperty('new') && req.query.new == 'true') {
+        query = `SELECT Products.*, Deals.discount, (SELECT AVG(rating) FROM ProductRatings WHERE productId = Products.id) as ratings FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.createdAt DESC`
+    } else if (req.query.hasOwnProperty('high') && req.query.high == 'true') {
+        query = `SELECT Products.*, Deals.discount FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.price DESC`
+    } else if (req.query.hasOwnProperty('low') && req.query.low == 'true') {
+        query = `SELECT Products.*, Deals.discount FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.price ASC`
+    } else if (req.query.hasOwnProperty('viewed') && req.query.viewed == 'true') {
+        query = `SELECT Products.*, Deals.discount FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.views DESC`
+    } else if (req.query.hasOwnProperty('purchased') && req.query.viewed == 'true') {
+        query = `SELECT Products.*, Deals.discount, (SELECT AVG(rating) FROM ProductRatings WHERE productId = Products.id) as ratings FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.views DESC`
     }
     pool.query(query, (err, result) => {
         if (err) res.status(500).send({ error: err })
@@ -190,6 +205,9 @@ products.get('/:id', isLoggedIn, async (req, res) => {
             WHERE Products.id = ${req.params.id}`
             if (req.user !== undefined) {
                 const insertRecentView = await pool.execute(`INSERT INTO RecentViews (userId, productId) SELECT ${req.user.id},${req.params.id} WHERE NOT EXISTS (SELECT * FROM RecentViews WHERE userId = ${req.user.id} AND productId = ${req.params.id});`)
+            } else {
+                const updateRecentCol = await pool.execute(`UPDATE Products SET views = views + 1
+                WHERE id=${req.params.id}`)
             }
             const averageRating = await pool.execute(`SELECT AVG(rating) as ratings FROM ProductRatings WHERE productID=${req.params.id}`)
             this.productRating = averageRating[0][0].ratings;
