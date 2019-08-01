@@ -12,6 +12,8 @@ export class ProductService {
     constructor(private http: HttpClient) { }
 
     selectedFilter = new BehaviorSubject<any>('new');
+    selectedDisplay = new BehaviorSubject<any>('grid');
+
     searchEntries(term): Observable<any> {
         return this.http.get('/api/products/search?products=' + term);
     }
@@ -40,5 +42,9 @@ export class ProductService {
     shareFilteredOption(selected) {
         console.log(selected);
         this.selectedFilter.next(selected);
+    }
+
+    shareDisplayOption(selected) {
+        this.selectedDisplay.next(selected);
     }
 }

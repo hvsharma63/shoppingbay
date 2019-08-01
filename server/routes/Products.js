@@ -51,17 +51,19 @@ products.get('/', (req, res) => {
         query = `SELECT Products.*, Deals.discount, (SELECT AVG(rating) FROM ProductRatings WHERE productId = Products.id) as ratings FROM Products 
         LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.createdAt DESC`
     } else if (req.query.hasOwnProperty('high') && req.query.high == 'true') {
-        query = `SELECT Products.*, Deals.discount FROM Products 
-        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.price DESC`
+        query = `SELECT Products.*, Deals.discount, (SELECT AVG(rating) FROM ProductRatings WHERE productId = Products.id) as ratings, IFNULL(Deals.discount,Products.price) as currentPrice FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY currentPrice DESC`
     } else if (req.query.hasOwnProperty('low') && req.query.low == 'true') {
-        query = `SELECT Products.*, Deals.discount FROM Products 
-        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.price ASC`
+        query = `SELECT Products.*, Deals.discount, (SELECT AVG(rating) FROM ProductRatings WHERE productId = Products.id) as ratings, IFNULL(Deals.discount,Products.price) as currentPrice FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY currentPrice ASC`
     } else if (req.query.hasOwnProperty('viewed') && req.query.viewed == 'true') {
-        query = `SELECT Products.*, Deals.discount FROM Products 
-        LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.views DESC`
-    } else if (req.query.hasOwnProperty('purchased') && req.query.viewed == 'true') {
         query = `SELECT Products.*, Deals.discount, (SELECT AVG(rating) FROM ProductRatings WHERE productId = Products.id) as ratings FROM Products 
         LEFT JOIN Deals ON Deals.productId = Products.id ORDER BY Products.views DESC`
+    } else if (req.query.hasOwnProperty('purchased') && req.query.purchased == 'true') {
+        query = `SELECT Products.*, pur.count as purchased,(SELECT AVG(rating) FROM ProductRatings WHERE productId = Products.id) as ratings, Deals.discount FROM Products 
+        LEFT JOIN Deals ON Deals.productId = Products.id
+        LEFT JOIN (SELECT productId, count(productId) as count FROM OrderProducts GROUP BY productId ORDER BY COUNT(productID) DESC) as pur on pur.productId = Products.id
+        order by purchased DESC`
     }
     pool.query(query, (err, result) => {
         if (err) res.status(500).send({ error: err })

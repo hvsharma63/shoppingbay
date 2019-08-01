@@ -10,11 +10,15 @@ export class ShopIndexComponent implements OnInit {
 
   products = [];
   constructor(private productsService: ProductService) { }
-  filteredOption;
+  filteredOption: string;
+  filteredDisplay: string;
   ngOnInit() {
     this.productsService.selectedFilter.subscribe(res => {
       this.filteredOption = res;
       this.getAllProducts();
+    });
+    this.productsService.selectedDisplay.subscribe(res => {
+      this.filteredDisplay = res;
     });
   }
   getAllProducts() {

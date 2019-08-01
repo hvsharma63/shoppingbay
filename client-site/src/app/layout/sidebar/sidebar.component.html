@@ -3,7 +3,7 @@
     <ul>
         <li>
             <label for="display">Display Options</label> <br>
-            <select class="form-control-sm">
+            <select class="form-control-sm" (input)="'getDisplayOption'($event.target.value)">
                 <option value="grid">Grid</option>
                 <option value="list">List</option>
             </select>

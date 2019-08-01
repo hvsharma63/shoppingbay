@@ -17,4 +17,8 @@ export class SidebarComponent implements OnInit {
   getFilterOption(value: string) {
     this.productService.shareFilteredOption(value);
   }
+
+  getDisplayOption(value: string) {
+    this.productService.shareDisplayOption(value);
+  }
 }

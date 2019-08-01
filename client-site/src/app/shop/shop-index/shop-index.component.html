@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="filteredDisplay === 'grid'">
     <div class="col-sm-6 col-md-6 col-lg-4" *ngFor="let product of products">
         <div class="product">
             <a [routerLink]="['/product-detail', (product.name | kebab)]" [queryParams]="{ pid: product.id}"
@@ -37,6 +37,76 @@
                                 class="ion-ios-cart ml-1"></i></span></a>
                 </p>
             </div>
+        </div>
+    </div>
+</div>
+<div class="container" *ngIf="filteredDisplay === 'list'">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="cart-list">
+                <table class="table">
+                    <thead class="thead-primary">
+                        <tr class="text-center">
+                            <th>&nbsp;</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center" *ngFor="let product of products">
+                            <td class="image-prod">
+                                <img class="img-fluid" style="max-width: 100px;" src="{{ product.imagePath }}"
+                                    alt="Colorlib Template">
+                            </td>
+                            <td class="product-name">
+                                <h3><a [routerLink]="['/product-detail', (product.name | kebab)]"
+                                        [queryParams]="{ pid: product.id}">{{ product.name }}</a></h3>
+                            </td>
+                            <td class="price">
+                                <span *ngIf="!product.discount">
+                                    <span class="price-sale" *ngIf="product.price">${{ product.price }}
+                                    </span>
+                                </span>
+                                <span *ngIf="product.discount">
+                                    <span class="mr-2 price-dc" style="color:gray; font-size: 1rem"
+                                        *ngIf="product.price"> <del>${{ product.price }}</del>
+                                    </span>
+                                    <span class="price-sale" *ngIf="product.discount">${{ product.discount }}
+                                    </span>
+                                </span>
+                            </td>
+
+                        </tr><!-- END TR-->
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col col-lg-5 col-md-6 mt-5 cart-wrap">
+            <div class="cart-total mb-3">
+                <h3>Cart Totals</h3>
+                <p class="d-flex">
+                    <span>Subtotal</span>
+                    <span>$20.60</span>
+                </p>
+                <p class="d-flex">
+                    <span>Delivery</span>
+                    <span>$0.00</span>
+                </p>
+                <p class="d-flex">
+                    <span>Discount</span>
+                    <span>$3.00</span>
+                </p>
+                <hr>
+                <p class="d-flex total-price">
+                    <span>Total</span>
+                    <span>$17.60</span>
+                </p>
+            </div>
+            <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to
+                    Checkout</a></p>
         </div>
     </div>
 </div>
