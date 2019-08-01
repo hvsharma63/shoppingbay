@@ -31,8 +31,8 @@
                     </div>
                 </div>
                 <p class="bottom-area d-flex px-3">
-                    <a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i
-                                class="ion-ios-add ml-1"></i></span></a>
+                    <a (click)="addProductToCart(product.id)" class="add-to-cart text-center py-2 mr-1"><span>Add to
+                            cart <i class="ion-ios-add ml-1"></i></span></a>
                     <a href="#" class="buy-now text-center py-2">Buy now<span><i
                                 class="ion-ios-cart ml-1"></i></span></a>
                 </p>
@@ -50,6 +50,7 @@
                             <th>&nbsp;</th>
                             <th>Product</th>
                             <th>Price</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,38 +76,21 @@
                                     </span>
                                 </span>
                             </td>
+                            <td>
+                                <p class="bottom-area d-flex px-3">
+                                    <a (click)="addProductToCart(product.id)"
+                                        class="add-to-cart text-center py-2 mr-1"><span>Add to
+                                            cart <i class="ion-ios-add ml-1"></i></span></a>
+                                    <a href="#" class="buy-now text-center py-2">Buy now<span><i
+                                                class="ion-ios-cart ml-1"></i></span></a>
+                                </p>
+                            </td>
 
                         </tr><!-- END TR-->
 
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col col-lg-5 col-md-6 mt-5 cart-wrap">
-            <div class="cart-total mb-3">
-                <h3>Cart Totals</h3>
-                <p class="d-flex">
-                    <span>Subtotal</span>
-                    <span>$20.60</span>
-                </p>
-                <p class="d-flex">
-                    <span>Delivery</span>
-                    <span>$0.00</span>
-                </p>
-                <p class="d-flex">
-                    <span>Discount</span>
-                    <span>$3.00</span>
-                </p>
-                <hr>
-                <p class="d-flex total-price">
-                    <span>Total</span>
-                    <span>$17.60</span>
-                </p>
-            </div>
-            <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to
-                    Checkout</a></p>
         </div>
     </div>
 </div>

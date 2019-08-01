@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/services/products.service';
 import { CategoryService } from 'src/app/services/categories.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { CartService } from 'src/app/services/cart.service';
 @Component({
   selector: 'app-home-content',
   templateUrl: './home-content.component.html',
@@ -14,7 +15,7 @@ export class HomeContentComponent implements OnInit {
   // tslint:disable-next-line: max-line-length
   constructor(private productsService: ProductService, private categoryService: CategoryService,
     // tslint:disable-next-line: align
-    private authService: AuthenticationService) { }
+    private authService: AuthenticationService, private cartService: CartService) { }
   categories = [];
   products = [];
   discountedProducts = [];
@@ -59,5 +60,9 @@ export class HomeContentComponent implements OnInit {
   searchProduct(searchTerm) {
     this.productsService.searchEntries(searchTerm)
       .subscribe(res => this.searchResult = res);
+  }
+
+  addProductToCart(productId) {
+    this.cartService.addProduct(productId);
   }
 }

@@ -10,7 +10,7 @@
                 <h5><small><i> ({{product.category}})</i></small></h5>
                 <div class="rating d-flex" *ngIf="product.ratings">
                     <p class="text-left mr-4" style="color:blue">
-                        <span class="mr-2">{{product.ratings}}</span>
+                        <span class="mr-2">{{product.ratings.toFixed(2)}}</span>
                         <app-ratings [totalRating]="product.ratings" *ngIf="product.ratings"></app-ratings>
                     </p>
                 </div>
@@ -49,7 +49,7 @@
                         <p style="color: #000;">{{ product.stock }} piece available</p>
                     </div>
                 </div>
-                <p><a href="cart.html" class="btn btn-black py-3 px-5">Add to Cart</a></p>
+                <p><a (click)="addProductToCart(product.id)" class="btn btn-black py-3 px-5">Add to Cart</a></p>
             </div>
         </div>
     </div>
