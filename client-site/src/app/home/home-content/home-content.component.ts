@@ -3,6 +3,8 @@ import { ProductService } from 'src/app/services/products.service';
 import { CategoryService } from 'src/app/services/categories.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-home-content',
   templateUrl: './home-content.component.html',
@@ -13,7 +15,7 @@ export class HomeContentComponent implements OnInit {
   searchResult: any;
   isLoggedIn = false;
   // tslint:disable-next-line: max-line-length
-  constructor(private productsService: ProductService, private categoryService: CategoryService,
+  constructor(private toastr: ToastrService, private productsService: ProductService, private categoryService: CategoryService,
     // tslint:disable-next-line: align
     private authService: AuthenticationService, private cartService: CartService) { }
   categories = [];
@@ -62,7 +64,8 @@ export class HomeContentComponent implements OnInit {
       .subscribe(res => this.searchResult = res);
   }
 
-  addProductToCart(productId) {
-    this.cartService.addProduct(productId);
+  addProductToCart(productId, qty) {
+    qty = 1;
+    this.cartService.addProduct({ productId, qty });
   }
 }

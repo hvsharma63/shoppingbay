@@ -12,6 +12,8 @@ import { CategoriesComponent } from './categories/categories.component';
 import { CategoriesDetailComponent } from './categories/categories-detail/categories-detail.component';
 import { ShopComponent } from './shop/shop.component';
 import { ShopIndexComponent } from './shop/shop-index/shop-index.component';
+import { CartComponent } from './cart/cart.component';
+import { CartIndexComponent } from './cart/cart-index/cart-index.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -33,6 +35,11 @@ const routes: Routes = [
   {
     path: 'shop', component: ShopComponent, children: [
       { path: '', component: ShopIndexComponent, pathMatch: 'full' },
+    ]
+  },
+  {
+    path: 'cart', component: CartComponent, children: [
+      { path: '', component: CartIndexComponent, pathMatch: 'full' },
     ]
   },
   { path: 'register', component: RegisterComponent },

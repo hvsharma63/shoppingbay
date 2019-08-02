@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/services/products.service';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -8,10 +9,16 @@ import { ProductService } from 'src/app/services/products.service';
   styleUrls: ['./product-detail.component.css']
 })
 export class ProductDetailComponent implements OnInit {
-
+  url = '../../../assets/js/script.js';
   product = [];
-  constructor(private route: ActivatedRoute, private productService: ProductService) { }
+  loadAPI: Promise<unknown>;
+  constructor(private route: ActivatedRoute, private productService: ProductService, private cartService: CartService) { }
   ngOnInit() {
+
+    this.loadAPI = new Promise(resolve => {
+      console.log('resolving promise...');
+      this.loadScript();
+    });
     // tslint:disable-next-line: radix
     const pid = parseInt(this.route.snapshot.queryParamMap.get('pid'));
     this.productService.getProductById(pid).subscribe(res => {
@@ -22,6 +29,20 @@ export class ProductDetailComponent implements OnInit {
 
   }
 
+  addProductToCart(productId: any, qty: number) {
+    console.log(qty);
+    this.cartService.addProduct({ productId, qty });
+  }
 
+  public loadScript() {
+    console.log('preparing to load...');
+    const node = document.createElement('script');
+    node.src = this.url;
+    node.type = 'text/javascript';
+    node.async = true;
+    // tslint:disable-next-line: deprecation
+    node.charset = 'utf-8';
+    document.getElementsByTagName('head')[0].appendChild(node);
+  }
 
 }

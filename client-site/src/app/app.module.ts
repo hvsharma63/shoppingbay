@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { TokenInterceptor } from './token.interceptor';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -25,6 +24,12 @@ import { RatingsComponent } from './shared/ratings/ratings.component';
 import { ShopComponent } from './shop/shop.component';
 import { ShopIndexComponent } from './shop/shop-index/shop-index.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
+import { CartComponent } from './cart/cart.component';
+import { CartIndexComponent } from './cart/cart-index/cart-index.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +52,8 @@ import { SidebarComponent } from './layout/sidebar/sidebar.component';
     ShopComponent,
     ShopIndexComponent,
     SidebarComponent,
+    CartComponent,
+    CartIndexComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +61,9 @@ import { SidebarComponent } from './layout/sidebar/sidebar.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    CommonModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [
     {
