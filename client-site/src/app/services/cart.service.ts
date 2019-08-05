@@ -15,21 +15,10 @@ export class CartService {
     CartState = this.cartSubject.asObservable();
 
     addProduct(product: { productId: number, qty: number }) {
-        console.log(product);
         const checkIfProductIsInCart = this.Products.some((ele) => {
-            if (ele.productId === product.productId) {
-                return (ele.qty === product.qty);
-            }
-            return false;
+            return (ele.productId === product.productId);
         });
         if (!checkIfProductIsInCart) { // false Condition
-            for (const iterator of this.Products) {
-                if (iterator.productId == product.productId) {
-                    console.log("in loop");
-                    iterator.qty = Number(iterator.qty) + Number(product.qty);
-                    console.log(typeof (iterator.qty));
-                }
-            }
             this.Products.push(product);
             this.cartSubject.next({ products: this.Products });
             this.toastr.success('Product Added to cart!');
