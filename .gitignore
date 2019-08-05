@@ -62,5 +62,5 @@ typings/
 server/assets/categoryImages
 server/assets/productImages
 admin-panel/.vscode/settings.json
-client-site/.vscode/settings.json
 server/.vscode/settings.json
+client-site/.vscode/settings.json
