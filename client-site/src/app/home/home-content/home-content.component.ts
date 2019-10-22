@@ -64,8 +64,8 @@ export class HomeContentComponent implements OnInit {
       .subscribe(res => this.searchResult = res);
   }
 
-  addProductToCart(productId, qty) {
-    qty = 1;
-    this.cartService.addProduct({ productId, qty });
+  addProductToCart(productId, quantity) {
+    quantity = 1;
+    this.cartService.addProduct({ productId, quantity });
   }
 }

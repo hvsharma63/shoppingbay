@@ -29,9 +29,9 @@ export class ProductDetailComponent implements OnInit {
 
   }
 
-  addProductToCart(productId: any, qty: number) {
-    console.log(qty);
-    this.cartService.addProduct({ productId, qty });
+  addProductToCart(productId: any, quantity: number) {
+    console.log(quantity);
+    this.cartService.addProduct({ productId, quantity });
   }
 
   public loadScript() {

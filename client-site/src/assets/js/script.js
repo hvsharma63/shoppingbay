@@ -5,17 +5,18 @@ $(document).ready(function () {
             $('#quantity').val(0);
         }
     });
-    var quantitiy = 0;
-    $('.quantity-right-plus').click(function (e) {
+    var quantity = 0;
+    $('.quantity-right-plus').off().click(function (e) {
+        console.log("sss", $('#quantity').val());
 
         // Stop acting like a button
         e.preventDefault();
         // Get the field name
-        if (($('#quantity').val() == null)) {
+        if (($('#quantity').val() === null)) {
             $('#quantity').val(0);
         }
         var quantity = parseInt($('#quantity').val());
-
+        console.log(quantity);
         // If is not undefined
 
         $('#quantity').val(quantity + 1);
@@ -25,7 +26,7 @@ $(document).ready(function () {
 
     });
 
-    $('.quantity-left-minus').click(function (e) {
+    $('.quantity-left-minus').off().click(function (e) {
         // Stop acting like a button
         e.preventDefault();
         // Get the field name
